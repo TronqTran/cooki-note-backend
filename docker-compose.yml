@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: cooki-note-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.docker
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  db:
+    container_name: cooki-note-mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: p@ssword
+      MYSQL_DATABASE: cooki-note
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  redis:
+    container_name: cooki-note-redis
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    restart: always
+
+volumes:
+  mysql_data:
