@@ -2,7 +2,7 @@ package com.vn.cookinote.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vn.cookinote.dtos.responses.ApiResponse;
-import com.vn.cookinote.enums.ApiCode;
+import com.vn.cookinote.enums.ApiStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         // Create an error response object with the appropriate error code, message, and exception details
         ApiResponse<Object> errorResponse = ApiResponse.builder()
-                .code(ApiCode.UNAUTHORIZED.getCode())
-                .message(ApiCode.UNAUTHORIZED.getMessage())
+                .code(ApiStatus.UNAUTHORIZED.getHttpStatus().value())
+                .message(ApiStatus.UNAUTHORIZED.getMessage())
+                .description(authException.getMessage())
                 .timestamp(Instant.now())
                 .build();
 

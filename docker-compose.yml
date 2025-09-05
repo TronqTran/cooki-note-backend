@@ -16,15 +16,16 @@ services:
     restart: always
 
   db:
-    container_name: cooki-note-mysql
-    image: mysql:8.0
+    container_name: cooki-note-postgres
+    image: postgres:15
     environment:
-      MYSQL_ROOT_PASSWORD: p@ssword
-      MYSQL_DATABASE: cooki-note
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: p@ssword
+      POSTGRES_DB: cooki-note
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     restart: always
 
   redis:
@@ -35,4 +36,4 @@ services:
     restart: always
 
 volumes:
-  mysql_data:
+  postgres_data:

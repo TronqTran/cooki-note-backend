@@ -18,7 +18,7 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public String generateOtp(String email) {
         // Generate a random 6-digit number
-        String otp = String.valueOf(new Random().nextInt(900000) + 100000); // 6 số
+        String otp = String.valueOf(new Random().nextInt(900000) + 100000); // 6 digits
         redisTemplate.opsForValue().set("OTP:" + email, otp, EXPIRE_MINUTES, TimeUnit.MINUTES);
         return otp;
     }

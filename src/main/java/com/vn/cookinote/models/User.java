@@ -2,63 +2,104 @@ package com.vn.cookinote.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vn.cookinote.enums.Role;
+import com.vn.cookinote.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
         name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_user_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_user_username", columnNames = "username")
+        },
         indexes = {
                 @Index(name = "idx_user_email", columnList = "email"),
-                @Index(name = "idx_user_username", columnList = "username")
+                @Index(name = "idx_user_username", columnList = "username"),
+                @Index(name = "idx_user_status", columnList = "status")
         }
 )
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
-    // Email is unique and not null
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    // Password is stored encrypted
-    @Column(length = 255)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Do not expose password in JSON responses
+    @Column(name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    // Username is unique and has a maximum length
-    @Column(unique = true, length = 50)
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(length = 50)
+    @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Column(length = 50)
+    @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(length = 500)
+    @Column(name = "biography", length = 500)
     private String biography;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "role", nullable = false, length = 20)
     private Role role = Role.USER;
 
-    // OAuth2/Social login
-    @Column(length = 50)
-    private String provider;     // GOOGLE, FACEBOOK, GITHUB...
-    @Column(length = 100)
-    private String providerId;   // ID from provider
+    @Column(name = "provider", length = 50)
+    private String provider;
 
-    // Avatar
-    @Column(length = 500)
+    @Column(name = "provider_id", length = 100)
+    private String providerId;
+
+    @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
-    @Column(length = 255)
-    private String avatarPublicId; // ID for cloud storage (e.g., Cloudinary)
+
+    @Column(name = "avatar_public_id")
+    private String avatarPublicId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MealPlan> mealPlans = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ShoppingList> shoppingLists = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<RecipeLike> likes = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private Status status = Status.ACTIVE;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

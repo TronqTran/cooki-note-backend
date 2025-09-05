@@ -3,7 +3,7 @@ package com.vn.cookinote.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vn.cookinote.dtos.responses.ApiResponse;
-import com.vn.cookinote.enums.ApiCode;
+import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.utils.JwtUtil;
@@ -51,10 +51,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // Build the authentication response object
         ApiResponse<Object> authenticationResponse =
                 ApiResponse.builder()
-                        .code(ApiCode.AUTHENTICATED.getCode())
-                        .message(ApiCode.AUTHENTICATED.getMessage())
-                        .data(Map.of("token", token))
+                        .code(ApiStatus.OK.getHttpStatus().value())
+                        .message(ApiStatus.OK.getMessage())
                         .timestamp(Instant.now())
+                        .data(Map.of(
+                                "token", token
+                        ))
                         .build();
 
         // Write the authentication response as JSON to the HTTP response

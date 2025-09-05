@@ -2,7 +2,7 @@ package com.vn.cookinote.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vn.cookinote.dtos.responses.ApiResponse;
-import com.vn.cookinote.enums.ApiCode;
+import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.services.TokenBlacklistService;
 import com.vn.cookinote.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -54,7 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Check if the JWT is blocklisted
         if (tokenBlacklistService.isTokenBlacklisted(jwt)) {
-            writeErrorResponse(response, "JWT token is blacklisted");
+            writeErrorResponse(response, "JWT token đã bị thu hồi", "");
+            return;
         }
 
         try {
@@ -72,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             // Handle any exceptions during token validation or authentication
-            writeErrorResponse(response, "Invalid JWT token: " + e.getMessage());
+            writeErrorResponse(response, "JWT token không hợp lệ", e.getMessage());
             return;
         }
 
@@ -80,13 +81,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void writeErrorResponse(HttpServletResponse response, String description) throws IOException {
+    private void writeErrorResponse(HttpServletResponse response, String message, String description) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json; charset=UTF-8");
         ApiResponse<Object> errorResponse = ApiResponse.builder()
-                .code(ApiCode.UNAUTHORIZED.getCode())
-                .message(ApiCode.UNAUTHORIZED.getMessage())
-                .description(description)
+                .code(ApiStatus.UNAUTHORIZED.getHttpStatus().value())
+                .message(message.isEmpty() ? ApiStatus.UNAUTHORIZED.getMessage() : message)
+                .description(description.isEmpty() ? null : description)
                 .timestamp(Instant.now())
                 .build();
 

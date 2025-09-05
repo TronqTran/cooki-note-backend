@@ -1,6 +1,7 @@
 package com.vn.cookinote;
 
 import com.vn.cookinote.enums.Role;
+import com.vn.cookinote.enums.Status;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -26,6 +27,7 @@ public class CookiNoteBackendApplication {
                     .lastName("Cookinote")
                     .provider("LOCAL")
                     .role(Role.ADMIN)
+                    .status(Status.ACTIVE)
                     .build();
             if (!userRepository.existsByEmail(admin.getEmail())){
                 userRepository.save(admin);

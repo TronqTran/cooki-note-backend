@@ -2,9 +2,11 @@ package com.vn.cookinote.utils;
 
 import com.vn.cookinote.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -21,8 +23,9 @@ public class JwtUtil {
 
     public static final Duration ACCESS_TOKEN_VALIDITY = Duration.ofDays(3);
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS256;
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
-        public String generateToken(User user) {
+    public String generateToken(User user) {
         // Get the current timestamp
         Instant now = Instant.now();
 
@@ -92,6 +95,12 @@ public class JwtUtil {
             } catch (JwtException e) {
                 throw new RuntimeException("Cannot get expiration from token", e);
             }
+    }
+
+    // Builds an Authentication object from the provided JWT token
+    public Authentication buildAuthenticationFromToken(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        return jwtAuthenticationConverter.convert(jwt);
     }
 }
 

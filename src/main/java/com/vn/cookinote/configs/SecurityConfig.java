@@ -40,6 +40,7 @@ public class SecurityConfig {
                 managementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);
         http.authorizeHttpRequests(matcherRegistry -> matcherRegistry
+                .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("api/v1/email/**", "api/v1/users/reset-password").permitAll()
                 .requestMatchers("/api/v1/hello/**").permitAll()
