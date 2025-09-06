@@ -1,6 +1,6 @@
 package com.vn.cookinote.controllers;
 
-import com.vn.cookinote.dtos.UserDto;
+import com.vn.cookinote.dtos.UserDTO;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
@@ -10,7 +10,6 @@ import com.vn.cookinote.models.User;
 import com.vn.cookinote.services.OtpService;
 import com.vn.cookinote.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -87,7 +85,7 @@ public class UserController {
         String email = jwt.getSubject();
         User user = userService.uploadAvatar(file, email);
 
-        return ApiResponse.toResponseEntity(ApiStatus.OK, "Avatar được tải lên thành công", user.getAvatarUrl());
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Avatar được tải lên thành công");
     }
 
     @PatchMapping("/update-profile")
@@ -95,11 +93,11 @@ public class UserController {
         String email = jwt.getSubject();
         User user = userService.updateProfile(request, email);
         // Prepare the user information to return
-        UserDto userInfo = UserDto.builder()
+        UserDTO userInfo = UserDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .avatarUrl(user.getAvatarUrl())
+//                .avatarUrl(user.getAvatarUrl())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .biography(user.getBiography())
@@ -115,11 +113,11 @@ public class UserController {
         User user = userService.findByEmail(jwt.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("User not found with email: " + jwt.getSubject())
         );
-        UserDto userInfo = UserDto.builder()
+        UserDTO userInfo = UserDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .avatarUrl(user.getAvatarUrl())
+//                .avatarUrl(user.getAvatarUrl())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .biography(user.getBiography())

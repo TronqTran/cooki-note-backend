@@ -1,10 +1,16 @@
-package com.vn.cookinote.services.iml;
+package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.requests.AuthenticationRequest;
 import com.vn.cookinote.dtos.requests.RegisterRequest;
+import com.vn.cookinote.enums.ProfileMediaType;
 import com.vn.cookinote.enums.Role;
 import com.vn.cookinote.enums.Status;
+import com.vn.cookinote.models.Media;
 import com.vn.cookinote.models.User;
+import com.vn.cookinote.models.UserMedia;
+import com.vn.cookinote.models.keys.UserMediaKey;
+import com.vn.cookinote.repositories.MediaRepository;
+import com.vn.cookinote.repositories.UserMediaRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.services.AuthenticationService;
 import com.vn.cookinote.utils.JwtUtil;
@@ -16,6 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -24,10 +33,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final MediaRepository mediaRepository;
+    private final UserMediaRepository userMediaRepository;
 
     @Override
     public void register(RegisterRequest registerRequest) {
         log.info("Register request: {}", registerRequest.email());
+
+        Media media = mediaRepository.findByPublicId("default-avatar")
+                .orElseThrow(() -> new RuntimeException("Default avatar not found"));
 
         User user = User.builder()
                 .email(registerRequest.email())
@@ -35,11 +49,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .username(registerRequest.username())
                 .firstName(registerRequest.firstName())
                 .lastName(registerRequest.lastName())
-                .avatarUrl("https://res.cloudinary.com/dwvgjmjuo/image/upload/v1754995759/profile_avatar/qcig6tpob98lmoyhzkss.jpg")
-                .provider("LOCAL")
+                .provider("LOCAL".toUpperCase())
                 .role(Role.USER)
                 .status(Status.ACTIVE)
                 .build();
+        userRepository.save(user);
+
+        UserMedia avatar = UserMedia.builder()
+                .id(new UserMediaKey(user.getId(), media.getId()))
+                .user(user)
+                .media(media)
+                .type(ProfileMediaType.AVATAR)
+                .build();
+
+        userMediaRepository.save(avatar);
+
+        // Use a mutable list for JPA-managed collections
+        List<UserMedia> mediaList = new ArrayList<>();
+        mediaList.add(avatar);
+        user.setMedia(mediaList);
+
         userRepository.save(user);
     }
 

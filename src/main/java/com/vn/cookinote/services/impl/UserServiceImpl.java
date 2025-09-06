@@ -1,11 +1,18 @@
-package com.vn.cookinote.services.iml;
+package com.vn.cookinote.services.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
+import com.vn.cookinote.enums.MediaType;
+import com.vn.cookinote.enums.ProfileMediaType;
+import com.vn.cookinote.models.Media;
 import com.vn.cookinote.models.User;
+import com.vn.cookinote.models.UserMedia;
+import com.vn.cookinote.models.keys.UserMediaKey;
+import com.vn.cookinote.repositories.MediaRepository;
+import com.vn.cookinote.repositories.UserMediaRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.security.CustomUser;
 import com.vn.cookinote.services.OtpService;
@@ -31,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final Cloudinary cloudinary;
     private final OtpService otpService;
+    private final MediaRepository mediaRepository;
+    private final UserMediaRepository userMediaRepository;
 
     @Override
     public boolean isEmailExist(String email) {
@@ -79,14 +88,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // Delete the previous avatar if exists
-        if (user.getAvatarPublicId() != null) {
-            cloudinary.uploader().destroy(user.getAvatarPublicId(), ObjectUtils.emptyMap());
-        }
-
         // Upload the new avatar
         var uploadResult = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap(
-                "folder", "profile_avatar",
+                "folder", "profile-avatar",
                 "resource_type", "image",
                 "overwrite", true
 
@@ -95,11 +99,21 @@ public class UserServiceImpl implements UserService {
         String publicId = (String) uploadResult.get("public_id");
         String url = (String) uploadResult.get("secure_url");
 
-        // Update the user's avatar'
-        user.setAvatarPublicId(publicId);
-        user.setAvatarUrl(url);
-        userRepository.save(user);
+        Media media = Media.builder()
+                .url(url)
+                .publicId(publicId)
+                .type(MediaType.IMAGE)
+                .caption("Avatar")
+                .build();
+        mediaRepository.save(media);
 
+        UserMedia userMedia = UserMedia.builder()
+                .id(new UserMediaKey(user.getId(), media.getId()))
+                .user(user)
+                .media(media)
+                .type(ProfileMediaType.AVATAR)
+                .build();
+        userMediaRepository.save(userMedia);
         return user;
     }
 

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -30,6 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final ObjectMapper mapper;
 
     @Override
+    @Transactional(readOnly = true)
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         // Log the success of OAuth2 authentication
         log.info(">>> OAuth2AuthenticationSuccessHandler onAuthenticationSuccess is called");
@@ -39,9 +41,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String email = oauth2User.getAttribute("email");
 
         // Fetch the user from the database using their email
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // Generate access and refresh tokens for the user
+        // Generate an access token for the user
         String token = jwtUtil.generateToken(user);
 
         // Set the HTTP response status and content type
@@ -54,9 +57,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                         .code(ApiStatus.OK.getHttpStatus().value())
                         .message(ApiStatus.OK.getMessage())
                         .timestamp(Instant.now())
-                        .data(Map.of(
-                                "token", token
-                        ))
+                        .data(Map.of("token", token))
                         .build();
 
         // Write the authentication response as JSON to the HTTP response

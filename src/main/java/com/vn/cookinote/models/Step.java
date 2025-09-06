@@ -43,7 +43,7 @@ public class Step {
 
     @OneToMany(mappedBy = "step", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<StepImage> images = new ArrayList<>();
+    private List<StepMedia> images = new ArrayList<>();
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;

@@ -1,4 +1,4 @@
-package com.vn.cookinote.services.iml;
+package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.services.EmailService;
 import jakarta.mail.MessagingException;

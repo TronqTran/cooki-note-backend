@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class RecipeLikeKey implements Serializable {
     @Column(name = "recipe_id", nullable = false)
     private Long recipeId;
+
     @Column(name = "user_id", nullable = false)
     private Long userId;
 }

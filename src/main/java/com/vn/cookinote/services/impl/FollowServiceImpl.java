@@ -1,4 +1,4 @@
-package com.vn.cookinote.services.iml;
+package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.FollowNotification;
 import com.vn.cookinote.models.Follow;
@@ -35,7 +35,7 @@ public class FollowServiceImpl implements FollowService {
 
         // Bắn thông báo realtime tới người bị follow
         FollowNotification payload = new FollowNotification(
-                follower.getId(), follower.getUsername(), follower.getAvatarUrl(), Instant.now());
+                follower.getId(), follower.getUsername(), follower.getUsername(), Instant.now());
         // gửi tới đích riêng của user (user destination)
         messagingTemplate.convertAndSendToUser(
                 target.getEmail(), "/queue/notifications", payload);

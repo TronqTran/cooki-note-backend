@@ -11,10 +11,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class RecipeIngredientKey implements Serializable {
-    @Column(name = "recipe_id", nullable = false)
-    private Long recipeId;
+public class StepMediaKey implements Serializable {
+    @Column(name = "step_id", nullable = false)
+    private Long stepId;
 
-    @Column(name = "ingredient_id", nullable = false)
-    private Long ingredientId;
+    @Column(name = "media_id", nullable = false)
+    private Long mediaId;
 }

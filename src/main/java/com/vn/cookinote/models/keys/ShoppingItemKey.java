@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class ShoppingItemKey implements Serializable {
     @Column(name = "shopping_list_id", nullable = false)
     private Long shoppingListId;
+
     @Column(name = "ingredient_id", nullable = false)
     private Long ingredientId;
 }

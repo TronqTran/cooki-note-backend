@@ -1,6 +1,8 @@
 package com.vn.cookinote.utils;
 
+import com.vn.cookinote.enums.ProfileMediaType;
 import com.vn.cookinote.models.User;
+import com.vn.cookinote.models.UserMedia;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,12 +37,17 @@ public class JwtUtil {
         // Calculate the token's expiration time
         Instant validity = now.plus(ACCESS_TOKEN_VALIDITY.getSeconds(), ChronoUnit.SECONDS);
 
+        // Get the latest avatar media for the user
+        Optional<UserMedia> latestAvatar = user.getMedia().stream()
+                .filter(m -> m.getType() == ProfileMediaType.AVATAR)
+                .max(Comparator.comparing(UserMedia::getCreatedAt));
+
         // Create a profile map with user details
         Map<String, Object> profile = new HashMap<>();
         profile.put("firstName", user.getFirstName());
         profile.put("lastName", user.getLastName());
         profile.put("username", user.getUsername());
-        profile.put("avatar", user.getAvatarUrl());
+        profile.put("avatar", latestAvatar.map(ua -> ua.getMedia().getUrl()).orElse(null));
 
         // Get user authorities
         Collection<? extends GrantedAuthority> authorities = user.getRole().getAuthorities();

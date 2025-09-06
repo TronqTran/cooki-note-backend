@@ -37,9 +37,6 @@ public class Recipe {
     @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
-
     @Column(name = "cook_time", nullable = false)
     private Integer cookTime = 0;
 
@@ -104,6 +101,10 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<RecipeLike> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<RecipeMedia> media = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

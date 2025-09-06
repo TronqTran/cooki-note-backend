@@ -5,16 +5,17 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.io.Serializable;
+
 @Embeddable
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class RecipeIngredientKey implements Serializable {
+public class RecipeMediaKey implements Serializable {
     @Column(name = "recipe_id", nullable = false)
     private Long recipeId;
 
-    @Column(name = "ingredient_id", nullable = false)
-    private Long ingredientId;
+    @Column(name = "media_id", nullable = false)
+    private Long mediaId;
 }
