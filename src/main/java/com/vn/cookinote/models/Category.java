@@ -38,12 +38,6 @@ public class Category {
     @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "icon_url", length = 500)
-    private String iconUrl;
-
-    @Column(name = "icon_public_id")
-    private String iconPublicId;
-
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
