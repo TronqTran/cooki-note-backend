@@ -97,7 +97,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .type(MediaType.IMAGE)
                         .url(picture)
                         .publicId(picture)
-                        .caption("Avatar")
                         .build();
                 Media savedAvatar = mediaRepository.save(avatar);
 
@@ -111,7 +110,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 userMediaRepository.save(userMedia);
 
                 // If a User has a collection for media, reflect it
-                savedUser.setMedia(List.of(userMedia));
+                savedUser.setMedias(List.of(userMedia));
             }
 
             return savedUser;

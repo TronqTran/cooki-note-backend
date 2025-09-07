@@ -38,7 +38,7 @@ public class JwtUtil {
         Instant validity = now.plus(ACCESS_TOKEN_VALIDITY.getSeconds(), ChronoUnit.SECONDS);
 
         // Get the latest avatar media for the user
-        Optional<UserMedia> latestAvatar = user.getMedia().stream()
+        Optional<UserMedia> latestAvatar = user.getMedias().stream()
                 .filter(m -> m.getType() == ProfileMediaType.AVATAR)
                 .max(Comparator.comparing(UserMedia::getCreatedAt));
 

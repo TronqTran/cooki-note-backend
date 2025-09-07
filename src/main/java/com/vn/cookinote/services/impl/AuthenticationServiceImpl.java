@@ -67,7 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Use a mutable list for JPA-managed collections
         List<UserMedia> mediaList = new ArrayList<>();
         mediaList.add(avatar);
-        user.setMedia(mediaList);
+        user.setMedias(mediaList);
 
         userRepository.save(user);
     }

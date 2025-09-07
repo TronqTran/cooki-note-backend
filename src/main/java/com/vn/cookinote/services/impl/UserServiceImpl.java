@@ -15,6 +15,7 @@ import com.vn.cookinote.repositories.MediaRepository;
 import com.vn.cookinote.repositories.UserMediaRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.security.CustomUser;
+import com.vn.cookinote.services.MediaService;
 import com.vn.cookinote.services.OtpService;
 import com.vn.cookinote.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
     private final OtpService otpService;
     private final MediaRepository mediaRepository;
     private final UserMediaRepository userMediaRepository;
+    private final MediaService mediaService;
 
     @Override
     public boolean isEmailExist(String email) {
@@ -89,23 +91,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         // Upload the new avatar
-        var uploadResult = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap(
-                "folder", "profile-avatar",
-                "resource_type", "image",
-                "overwrite", true
-
-        ));
-
-        String publicId = (String) uploadResult.get("public_id");
-        String url = (String) uploadResult.get("secure_url");
-
-        Media media = Media.builder()
-                .url(url)
-                .publicId(publicId)
-                .type(MediaType.IMAGE)
-                .caption("Avatar")
-                .build();
-        mediaRepository.save(media);
+        Media media = mediaService.uploadRecipeAvatar(avatar);
 
         UserMedia userMedia = UserMedia.builder()
                 .id(new UserMediaKey(user.getId(), media.getId()))

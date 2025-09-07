@@ -38,7 +38,6 @@ public class CookiNoteBackendApplication {
             Media defaultAvatar = Media.builder()
                     .publicId("default-avatar")
                     .url("https://res.cloudinary.com/dwvgjmjuo/image/upload/v1754995759/profile_avatar/qcig6tpob98lmoyhzkss.jpg")
-                    .caption("Default avatar")
                     .type(MediaType.IMAGE)
                     .build();
 

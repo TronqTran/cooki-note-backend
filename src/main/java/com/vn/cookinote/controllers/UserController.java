@@ -1,6 +1,6 @@
 package com.vn.cookinote.controllers;
 
-import com.vn.cookinote.dtos.UserDTO;
+import com.vn.cookinote.dtos.UserDto;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
@@ -93,17 +93,7 @@ public class UserController {
         String email = jwt.getSubject();
         User user = userService.updateProfile(request, email);
         // Prepare the user information to return
-        UserDTO userInfo = UserDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-//                .avatarUrl(user.getAvatarUrl())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .biography(user.getBiography())
-                .followers(0)
-                .following(0)
-                .build();
+        UserDto userInfo = UserDto.fromEntity(user);
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Cập nhật hồ sơ thành công", userInfo);
     }
@@ -113,17 +103,7 @@ public class UserController {
         User user = userService.findByEmail(jwt.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("User not found with email: " + jwt.getSubject())
         );
-        UserDTO userInfo = UserDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-//                .avatarUrl(user.getAvatarUrl())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .biography(user.getBiography())
-                .followers(0)
-                .following(0)
-                .build();
+        UserDto userInfo = UserDto.fromEntity(user);
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy thông tin người dùng thành công", userInfo);
     }
