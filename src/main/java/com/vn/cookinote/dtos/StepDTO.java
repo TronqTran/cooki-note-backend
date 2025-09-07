@@ -1,16 +1,28 @@
 package com.vn.cookinote.dtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.vn.cookinote.models.Step;
 import lombok.Builder;
-import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Data
+
 @Builder
-public class StepDTO {
-    private Integer stepOrder;
-    private String description;
-    private Integer estimatedTimeMinutes;
-    private List<String> imageUrls;
+public record StepDto(Long id, Integer stepOrder, String description, Integer estimatedTimeMinutes,
+                      List<StepMediaDto> medias) implements Serializable {
+
+    public static StepDto fromEntity(Step step) {
+        return StepDto.builder()
+                .id(step.getId())
+                .stepOrder(step.getStepOrder())
+                .description(step.getDescription())
+                .estimatedTimeMinutes(step.getEstimatedTimeMinutes())
+                .medias(StepMediaDto.fromEntities(step.getMedias()))
+                .build();
+    }
+
+    public static List<StepDto> fromEntities(List<Step> steps) {
+        return steps.stream()
+                .map(StepDto::fromEntity)
+                .toList();
+    }
 }
