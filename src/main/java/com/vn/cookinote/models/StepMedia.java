@@ -30,9 +30,6 @@ public class StepMedia {
             foreignKey = @ForeignKey(name = "fk_step_media_media"))
     private Media media;
 
-    @Column(name = "display_order")
-    private Integer displayOrder;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
