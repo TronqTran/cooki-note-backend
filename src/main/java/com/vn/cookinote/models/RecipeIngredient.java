@@ -46,6 +46,12 @@ public class RecipeIngredient {
     @Column(name = "unit", length = 50)
     private String unit;
 
+    @Column(name = "required", nullable = false)
+    private Boolean required = true;
+
+    @Column(name = "note", length = 500)
+    private String note;
+
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
