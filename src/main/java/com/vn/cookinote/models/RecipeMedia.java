@@ -42,9 +42,6 @@ public class RecipeMedia {
     @Column(name = "type", length = 50, nullable = false)
     private ProfileMediaType type = ProfileMediaType.AVATAR;
 
-    @Column(name = "display_order")
-    private Integer displayOrder;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

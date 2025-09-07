@@ -37,8 +37,8 @@ public class Recipe {
     @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "cook_time", nullable = false)
-    private Integer cookTime = 0;
+    @Column(name = "cook_time_minutes", nullable = false)
+    private Integer cookTimeMinutes = 0;
 
     @Column(name = "servings", nullable = false)
     private Integer servings = 1;
@@ -104,7 +104,7 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<RecipeMedia> media = new ArrayList<>();
+    private List<RecipeMedia> medias = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
