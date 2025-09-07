@@ -39,9 +39,6 @@ public class Media {
     @Column(name = "type", nullable = false, length = 20)
     private MediaType type;
 
-    @Column(name = "caption")
-    private String caption;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
