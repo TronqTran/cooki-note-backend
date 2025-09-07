@@ -1,14 +1,26 @@
 package com.vn.cookinote.dtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.vn.cookinote.models.Category;
 import lombok.Builder;
-import lombok.Data;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Data
+import java.io.Serializable;
+import java.util.stream.StreamSupport;
+
 @Builder
-public class CategoryDTO {
-    private String name;
-    private String description;
-    private String iconUrl;
+public record CategoryDto(Long id, String name, String description) implements Serializable {
+
+    public static CategoryDto fromEntity(Category category) {
+        return CategoryDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .build();
+    }
+
+    public static Iterable<CategoryDto> fromEntities(Iterable<Category> categories) {
+        return StreamSupport.stream(categories.spliterator(), false)
+                .map(CategoryDto::fromEntity)
+                .toList();
+    }
+
 }
