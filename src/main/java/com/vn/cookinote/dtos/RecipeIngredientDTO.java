@@ -12,6 +12,7 @@ public record RecipeIngredientDto(IngredientDto ingredient, BigDecimal quantity,
                                   String note) implements Serializable {
 
     public static RecipeIngredientDto fromEntity(RecipeIngredient recipeIngredient) {
+        if (recipeIngredient == null) return null;
         return RecipeIngredientDto.builder()
                 .ingredient(IngredientDto.fromEntity(recipeIngredient.getIngredient()))
                 .quantity(recipeIngredient.getQuantity())
@@ -22,6 +23,7 @@ public record RecipeIngredientDto(IngredientDto ingredient, BigDecimal quantity,
     }
 
     public static List<RecipeIngredientDto> fromEntities(List<RecipeIngredient> ingredients) {
+        if (ingredients == null) return null;
         return ingredients.stream()
                 .map(RecipeIngredientDto::fromEntity)
                 .toList();

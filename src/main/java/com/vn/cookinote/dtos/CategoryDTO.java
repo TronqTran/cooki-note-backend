@@ -10,6 +10,7 @@ import java.util.stream.StreamSupport;
 public record CategoryDto(Long id, String name, String description) implements Serializable {
 
     public static CategoryDto fromEntity(Category category) {
+        if (category == null) return null;
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
@@ -18,6 +19,7 @@ public record CategoryDto(Long id, String name, String description) implements S
     }
 
     public static Iterable<CategoryDto> fromEntities(Iterable<Category> categories) {
+        if (categories == null) return null;
         return StreamSupport.stream(categories.spliterator(), false)
                 .map(CategoryDto::fromEntity)
                 .toList();

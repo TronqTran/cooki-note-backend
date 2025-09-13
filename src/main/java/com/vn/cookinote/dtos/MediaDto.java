@@ -11,6 +11,7 @@ import java.util.stream.StreamSupport;
 public record MediaDto(Long id, String url, String publicId, MediaType type) implements Serializable {
 
     public static MediaDto fromEntity(Media media) {
+        if (media == null) return null;
         return MediaDto.builder()
                 .id(media.getId())
                 .url(media.getUrl())
@@ -20,6 +21,7 @@ public record MediaDto(Long id, String url, String publicId, MediaType type) imp
     }
 
     public static Iterable<MediaDto> fromEntities(Iterable<Media> media) {
+        if (media == null) return null;
         return StreamSupport.stream(media.spliterator(), false)
                 .map(MediaDto::fromEntity)
                 .toList();

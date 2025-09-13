@@ -6,13 +6,12 @@ import lombok.Builder;
 import java.io.Serializable;
 
 @Builder
-public record IngredientDto(Long id, String name, String description) implements Serializable {
+public record IngredientDto(String name) implements Serializable {
 
     public static IngredientDto fromEntity(Ingredient ingredient) {
+        if (ingredient == null) return null;
         return IngredientDto.builder()
-                .id(ingredient.getId())
                 .name(ingredient.getName())
-                .description(ingredient.getDescription())
                 .build();
     }
 }

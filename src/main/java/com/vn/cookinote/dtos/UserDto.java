@@ -11,8 +11,9 @@ import java.util.List;
 @Builder
 public record UserDto(Long id, String email, String username, String firstName, String lastName, LocalDate dateOfBirth,
                       Gender gender, String biography, List<FollowDto> following,
-                      List<FollowDto> followers) implements Serializable {
+                      List<FollowDto> followers, List<UserMediaDto> medias) implements Serializable {
     public static UserDto fromEntity(User user) {
+        if (user == null) return null;
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -24,6 +25,7 @@ public record UserDto(Long id, String email, String username, String firstName, 
                 .gender(user.getGender())
                 .following(FollowDto.fromEntities(user.getFollowing()))
                 .followers(FollowDto.fromEntities(user.getFollowers()))
+                .medias(UserMediaDto.fromEntities(user.getMedias()))
                 .build();
     }
 }

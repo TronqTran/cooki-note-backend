@@ -11,6 +11,7 @@ public record StepDto(Long id, Integer stepOrder, String description, Integer es
                       List<StepMediaDto> medias) implements Serializable {
 
     public static StepDto fromEntity(Step step) {
+        if (step == null) return null;
         return StepDto.builder()
                 .id(step.getId())
                 .stepOrder(step.getStepOrder())
@@ -21,6 +22,7 @@ public record StepDto(Long id, Integer stepOrder, String description, Integer es
     }
 
     public static List<StepDto> fromEntities(List<Step> steps) {
+        if (steps == null) return null;
         return steps.stream()
                 .map(StepDto::fromEntity)
                 .toList();

@@ -10,6 +10,7 @@ import java.util.List;
 @Builder
 public record FollowDto(LocalDateTime createdAt) implements Serializable {
     public static List<FollowDto> fromEntities(List<Follow> following) {
+        if (following == null) return null;
         return following.stream()
                 .map(follow -> FollowDto.builder()
                         .createdAt(follow.getCreatedAt())
