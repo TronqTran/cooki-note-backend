@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.time.Instant;
@@ -32,6 +33,7 @@ public class ApiResponse<T> {
     public static <T> ResponseEntity<ApiResponse<T>> toResponseEntity(ApiStatus status, String message, T data) {
         return ResponseEntity
                 .status(status.getHttpStatus())
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.<T>builder()
                         .code(status.getHttpStatus().value())
                         .message(message)

@@ -40,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void register(RegisterRequest registerRequest) {
         log.info("Register request: {}", registerRequest.email());
 
-        Media media = mediaRepository.findByPublicId("default-avatar")
+        Media media = mediaRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Default avatar not found"));
 
         User user = User.builder()
@@ -50,6 +50,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .firstName(registerRequest.firstName())
                 .lastName(registerRequest.lastName())
                 .provider("LOCAL".toUpperCase())
+                .dateOfBirth(registerRequest.dateOfBirth())
+                .gender(registerRequest.gender())
                 .role(Role.USER)
                 .status(Status.ACTIVE)
                 .build();

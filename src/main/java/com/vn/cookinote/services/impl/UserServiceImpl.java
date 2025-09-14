@@ -1,17 +1,13 @@
 package com.vn.cookinote.services.impl;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
-import com.vn.cookinote.enums.MediaType;
 import com.vn.cookinote.enums.ProfileMediaType;
 import com.vn.cookinote.models.Media;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.models.UserMedia;
 import com.vn.cookinote.models.keys.UserMediaKey;
-import com.vn.cookinote.repositories.MediaRepository;
 import com.vn.cookinote.repositories.UserMediaRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.security.CustomUser;
@@ -37,9 +33,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final Cloudinary cloudinary;
     private final OtpService otpService;
-    private final MediaRepository mediaRepository;
     private final UserMediaRepository userMediaRepository;
     private final MediaService mediaService;
 
@@ -116,6 +110,8 @@ public class UserServiceImpl implements UserService {
         if (!request.lastName().isEmpty()) user.setLastName(request.lastName());
         if (!request.username().isEmpty()) user.setUsername(request.username());
         if (!request.biography().isEmpty()) user.setBiography(request.biography());
+        if (request.dateOfBirth() != null) user.setDateOfBirth(request.dateOfBirth());
+        if (request.gender() != null) user.setGender(request.gender());
         userRepository.save(user);
 
         return user;
