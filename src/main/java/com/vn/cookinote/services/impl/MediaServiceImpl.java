@@ -8,10 +8,12 @@ import com.vn.cookinote.models.Media;
 import com.vn.cookinote.repositories.MediaRepository;
 import com.vn.cookinote.services.MediaService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MediaServiceImpl implements MediaService {
@@ -21,6 +23,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media uploadUserAvatar(MultipartFile file) throws IOException {
+        log.info("Upload user avatar");
         var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
                 "folder", "profile-avatar",
                 "resource_type", "image",
@@ -42,6 +45,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media uploadRecipeAvatar(MultipartFile file) throws IOException {
+        log.info("Upload recipe avatar");
         var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
                 "folder", "cooki-note/recipes",
                 "resource_type", "image",
@@ -62,6 +66,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Media uploadStepImage(MultipartFile file) throws IOException {
+        log.info("Upload step image");
         var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
                 "folder", "cooki-note/steps",
                 "resource_type", "image",

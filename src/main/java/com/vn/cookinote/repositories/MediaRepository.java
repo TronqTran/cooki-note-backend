@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MediaRepository extends JpaRepository<Media, Long> {
     boolean existsByPublicId(String publicId);
 
-    Optional<Media> findByPublicId(String publicId);
+    Optional<Media> findById(Long id);
 }
