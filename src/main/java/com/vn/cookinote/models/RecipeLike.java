@@ -40,9 +40,6 @@ public class RecipeLike {
     @ToString.Exclude
     private Recipe recipe;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
