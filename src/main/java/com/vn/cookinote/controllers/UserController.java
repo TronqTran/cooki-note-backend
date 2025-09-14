@@ -98,7 +98,7 @@ public class UserController {
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Cập nhật hồ sơ thành công", userInfo);
     }
 
-    @GetMapping("/information")
+    @GetMapping("/me")
     public ResponseEntity<ApiResponse<Object>> getInformation(@AuthenticationPrincipal Jwt jwt) {
         User user = userService.findByEmail(jwt.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("User not found with email: " + jwt.getSubject())
@@ -107,4 +107,15 @@ public class UserController {
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy thông tin người dùng thành công", userInfo);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Object>> getUserById(@PathVariable Long id) {
+        User user = userService.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("User not found with id: " + id)
+        );
+        UserDto userInfo = UserDto.fromEntity(user);
+
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy thông tin người dùng thành công", userInfo);
+    }
+
 }

@@ -129,4 +129,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Unsupported authentication type");
         }
     }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return Optional.ofNullable(userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id)));
+    }
 }
