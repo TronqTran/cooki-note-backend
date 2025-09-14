@@ -31,7 +31,7 @@ public record RecipeDto2(Long id, String title, String description, Integer cook
                 .steps(StepDto.fromEntities(entity.getSteps()))
                 .ingredients(RecipeIngredientDto.fromEntities(entity.getIngredients()))
                 .comments(CommentDto.fromEntities(entity.getComments()))
-                .likes(RecipeLikeDto.fromEntities(entity.getLikes()).stream().limit(5L).toList())
+                .likes(RecipeLikeDto.fromEntities(entity.getLikes()))
                 .medias(RecipeMediaDto.fromEntities(entity.getMedias()))
                 .build(
         );

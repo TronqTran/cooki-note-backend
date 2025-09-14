@@ -51,9 +51,7 @@ public class RecipeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<RecipeDto1>>> searchRecipes(@RequestParam("keyword") String keyword,
-                                                                       @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
-                                                                       Pageable pageable) {
+    public ResponseEntity<ApiResponse<List<RecipeDto1>>> searchRecipes(@RequestParam("keyword") String keyword, Pageable pageable) {
         Page<Recipe> recipe = recipeService.searchRecipes(keyword, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), RecipeDto1.fromEntities(recipe.getContent()));
     }
