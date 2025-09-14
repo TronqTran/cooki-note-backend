@@ -47,9 +47,6 @@ public class Recipe {
     @Column(name = "difficulty", nullable = false, length = 20)
     private Difficulty difficulty = Difficulty.EASY;
 
-    @Column(name = "likes_count", nullable = false)
-    private Long likesCount = 0L;
-
     @Column(name = "views_count", nullable = false)
     private Long viewsCount = 0L;
 
