@@ -16,7 +16,6 @@ import java.util.List;
         indexes = {
                 @Index(name = "idx_ingredient_name", columnList = "name"),
                 @Index(name = "idx_ingredient_created_at", columnList = "created_at"),
-                @Index(name = "idx_ingredient_is_deleted", columnList = "is_deleted")
         }
 )
 @Getter
@@ -33,12 +32,6 @@ public class Ingredient {
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
-
-    @Column(name = "description", length = 500)
-    private String description;
-
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

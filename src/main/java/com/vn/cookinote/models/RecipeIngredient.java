@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
         indexes = {
                 @Index(name = "idx_recipe_ingredient_recipe", columnList = "recipe_id"),
                 @Index(name = "idx_recipe_ingredient_ingredient", columnList = "ingredient_id"),
-                @Index(name = "idx_recipe_ingredient_active", columnList = "recipe_id, is_deleted")
         }
 )
 @Getter
@@ -51,9 +50,6 @@ public class RecipeIngredient {
 
     @Column(name = "note", length = 500)
     private String note;
-
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
