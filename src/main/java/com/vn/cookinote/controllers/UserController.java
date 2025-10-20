@@ -1,6 +1,7 @@
 package com.vn.cookinote.controllers;
 
 import com.vn.cookinote.dtos.UserDto;
+import com.vn.cookinote.dtos.UserDto1;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -116,6 +119,14 @@ public class UserController {
         UserDto userInfo = UserDto.fromEntity(user);
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy thông tin người dùng thành công", userInfo);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<UserDto1>>> searchUser(@RequestParam("keyword") String keyword) {
+        Iterable<User> users = userService.searchUser(keyword);
+        List<UserDto1> userDTOS = new ArrayList<>();
+        users.forEach(user -> userDTOS.add(UserDto1.fromEntity(user)));
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tìm kiếm người dùng thành công", userDTOS);
     }
 
 }

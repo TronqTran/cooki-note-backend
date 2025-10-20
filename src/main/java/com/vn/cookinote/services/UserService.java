@@ -19,6 +19,6 @@ public interface UserService {
     User uploadAvatar(MultipartFile avatar, String email) throws IOException;
     User updateProfile(UpdateProfileRequest request, String  email);
     User getAuthenticatedUser(Principal connectedUser);
-
+    Iterable<User> searchUser(String keyword);
     Optional<User> findById(Long id);
 }

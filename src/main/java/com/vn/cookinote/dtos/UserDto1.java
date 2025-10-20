@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Builder
-public record UserDto1(Long id, String email, String firstName, String lastName, List<UserMediaDto> medias) implements Serializable {
+public record UserDto1(Long id, String email, String firstName, String lastName, String username, List<UserMediaDto> medias) implements Serializable {
 
     public static UserDto1 fromEntity(User user) {
         if (user == null) return null;
@@ -16,6 +16,7 @@ public record UserDto1(Long id, String email, String firstName, String lastName,
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .username(user.getUsername())
                 .medias(UserMediaDto.fromEntities(user.getMedias()))
                 .build();
     }

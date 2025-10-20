@@ -131,6 +131,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Iterable<User> searchUser(String keyword) {
+        return userRepository.searchByUsername(keyword);
+    }
+
+    @Override
     public Optional<User> findById(Long id) {
         return Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id)));
