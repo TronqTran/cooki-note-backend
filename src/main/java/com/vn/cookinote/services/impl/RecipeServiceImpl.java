@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
     private final RecipeLikeRepository recipeLikeRepository;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Recipe createRecipe(RecipeDto recipeDto, String email) {
@@ -79,7 +82,6 @@ public class RecipeServiceImpl implements RecipeService {
                 Step step = Step.builder()
                         .stepOrder(stepDto.stepOrder())
                         .description(stepDto.description())
-                        .estimatedTimeMinutes(stepDto.estimatedTimeMinutes())
                         .recipe(recipe)
                         .isDeleted(false)
                         .build();
@@ -194,6 +196,104 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setIsDeleted(true);
         recipeRepository.save(recipe);
         return true;
+    }
+
+    @Override
+    public Recipe updateRecipe(RecipeDto recipeDto, Long id, String email) {
+        log.info("Updating recipe by id: {}", recipeDto.id());
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe == null) return null;
+        if (!recipe.getUser().getEmail().equals(email)) return null;
+
+        recipe.setTitle(recipeDto.title());
+        recipe.setDescription(recipeDto.description());
+        recipe.setCookTimeMinutes(recipeDto.cookTimeMinutes());
+        recipe.setDifficulty(recipeDto.difficulty());
+        recipe.setServings(recipeDto.servings());
+
+        // Update category
+        if (recipeDto.category() != null && recipeDto.category().id() != null) {
+            categoryRepository.findById(recipeDto.category().id()).ifPresent(recipe::setCategory);
+        } else {
+            recipe.setCategory(null);
+        }
+
+        // Update medias
+        if (recipeDto.medias() != null) {
+            List<RecipeMedia> recipeMedias = recipeDto.medias().stream()
+                .map(recipeMediaDto -> mediaRepository.findById(recipeMediaDto.media().id())
+                    .map(media -> RecipeMedia.builder()
+                            .id(new RecipeMediaKey(recipe.getId(), media.getId()))
+                            .media(media)
+                            .recipe(recipe)
+                            .type(ProfileMediaType.AVATAR)
+                            .build())
+                    .orElse(null))
+                .filter(java.util.Objects::nonNull)
+                .toList();
+            recipe.setMedias(recipeMedias);
+        } else {
+            recipe.setMedias(new ArrayList<>());
+        }
+
+        // Update steps
+        if (recipeDto.steps() != null) {
+            List<Step> steps = new ArrayList<>();
+            for (StepDto stepDto : recipeDto.steps()) {
+                Step step = Step.builder()
+                        .stepOrder(stepDto.stepOrder())
+                        .description(stepDto.description())
+                        .recipe(recipe)
+                        .isDeleted(false)
+                        .build();
+                if (stepDto.medias() != null) {
+                    List<StepMedia> stepMedias = stepDto.medias().stream()
+                            .map(stepMediaDto -> mediaRepository.findById(stepMediaDto.media().id())
+                                    .map(media -> StepMedia.builder()
+                                            .id(new StepMediaKey(step.getId(), media.getId()))
+                                            .media(media)
+                                            .step(step)
+                                            .build())
+                                    .orElse(null))
+                            .filter(java.util.Objects::nonNull)
+                            .toList();
+                    step.setMedias(stepMedias);
+                }
+                steps.add(step);
+            }
+            recipe.setSteps(steps);
+        } else {
+            recipe.setSteps(new ArrayList<>());
+        }
+
+        // Update ingredients
+        if (recipeDto.ingredients() != null) {
+            List<RecipeIngredient> recipeIngredients = recipeDto.ingredients().stream()
+                .map(ingredientDto -> {
+                    Ingredient ingredient = ingredientRepository.findByName(ingredientDto.ingredient().name())
+                            .orElseGet(() -> {
+                                Ingredient newIngredient = new Ingredient();
+                                newIngredient.setName(ingredientDto.ingredient().name());
+                                return ingredientRepository.save(newIngredient);
+                            });
+
+                    return RecipeIngredient.builder()
+                            .id(new RecipeIngredientKey(recipe.getId(), ingredient.getId()))
+                            .recipe(recipe)
+                            .ingredient(ingredient)
+                            .quantity(ingredientDto.quantity())
+                            .unit(ingredientDto.unit())
+                            .required(ingredientDto.required())
+                            .note(ingredientDto.note())
+                            .build();
+                })
+                .toList();
+            recipe.setIngredients(recipeIngredients);
+        } else {
+            recipe.setIngredients(new ArrayList<>());
+        }
+
+        return recipeRepository.save(recipe);
     }
 
     @Override

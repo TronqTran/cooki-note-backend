@@ -12,6 +12,7 @@ public interface RecipeService {
     Page<Recipe> searchRecipes(String keyword, Pageable pageable);
     Page<Recipe> findLikedRecipes(String email, Pageable pageable);
     boolean deleteRecipe(Long id, String email);
+    Recipe updateRecipe(RecipeDto recipeDto, Long id, String email);
     Page<Recipe> findMyRecipes(String email, Pageable pageable);
 
     Page<Recipe> findRecipesByCategory(Long id, Pageable pageable);

@@ -7,6 +7,7 @@ import com.vn.cookinote.dtos.responses.ApiResponse;
 import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.models.Recipe;
 import com.vn.cookinote.services.RecipeService;
+import com.vn.cookinote.services.ViewHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
     private final RecipeService recipeService;
+    private final ViewHistoryService viewHistoryService;
 
     @PostMapping()
     public ResponseEntity<ApiResponse<RecipeDto2>> createRecipe(@RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
@@ -34,12 +36,24 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<RecipeDto2>> getRecipeById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<RecipeDto2>> getRecipeById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
         Recipe recipe = recipeService.findRecipeById(id);
         if (recipe == null) {
             return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, ApiStatus.NOT_FOUND.getMessage());
         }
+        viewHistoryService.saveViewHistory(email, RecipeDto1.fromEntity(recipe));
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), RecipeDto2.fromEntity(recipe));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<RecipeDto2>> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
+        Recipe recipe = recipeService.updateRecipe(recipeDto, id, email);
+        if (recipe == null) {
+            return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, ApiStatus.NOT_FOUND.getMessage());
+        }
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Công thức đã được cập nhật thành công", RecipeDto2.fromEntity(recipe));
     }
 
     @GetMapping()
@@ -98,5 +112,13 @@ public class RecipeController {
                                                                               Pageable pageable) {
         Page<Recipe> recipe = recipeService.findRecipesByUserId(id, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), RecipeDto1.fromEntities(recipe.getContent()));
+    }
+
+    @GetMapping("/recent-views")
+    public ResponseEntity<ApiResponse<List<RecipeDto1>>> getRecentViewedRecipes(@AuthenticationPrincipal Jwt jwt,
+                                                                                 @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        String email = jwt.getSubject();
+        List<RecipeDto1> recentViews = viewHistoryService.getRecentViews(email, limit);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), recentViews);
     }
 }
