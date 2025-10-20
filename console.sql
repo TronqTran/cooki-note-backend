@@ -118,15 +118,15 @@ VALUES (now(), 'Bánh phở trắng, sợi to', '200.00', true, 'grams', now(), 
        (now(), 'Phô mai lát hoặc bào sợi', '30.00', true, 'grams', now(), 14, 4),
        (now(), 'Rau xanh tươi (xà lách, cà chua)', '50.00', true, 'grams', now(), 15, 5);
 
-INSERT INTO steps (created_at, description, estimated_time_minutes, is_deleted, step_order, updated_at, recipe_id)
-VALUES (now(), 'Chuẩn bị nguyên liệu: Rửa sạch và cắt nhỏ hành lá. Chuẩn bị bánh phở, thịt bò và các gia vị cần thiết.', 10, false, 1, now(), 1),
-       (now(), 'Nấu nước dùng: Đun sôi nước dùng với các gia vị như gừng, hành tím, quế, hồi để tạo hương vị đặc trưng cho phở.', 15, false, 2, now(), 1),
-       (now(), 'Chế biến bánh mì: Cắt bánh mì thành hai phần, phết pate lên một mặt và xếp chả lụa cùng rau sống vào giữa.', 5, false, 1, now(), 2),
-       (now(), 'Chuẩn bị sushi: Trải cơm sushi lên lá rong biển, thêm hải sản và cuộn chặt lại. Cắt thành từng miếng vừa ăn.', 15, false, 1, now(), 3),
-       (now(), 'Nướng hamburger: Nặn thịt bò băm thành miếng dày và nướng trên bếp hoặc lò nướng cho đến khi chín.', 10, false, 1, now(), 4),
-       (now(), 'Thêm phô mai lên trên miếng thịt bò vừa nướng, đợi phô mai tan chảy.', 3, false, 2, now(), 4),
-       (now(), 'Kẹp thịt bò và phô mai vào bánh hamburger cùng rau củ tươi.', 2, false, 3, now(), 4),
-       (now(), 'Trộn salad: Rửa sạch rau xanh và cắt nhỏ. Trộn với nước sốt yêu thích và trang trí với các loại hạt nếu muốn.', 10, false, 1, now(), 5);
+INSERT INTO steps (created_at, description, is_deleted, step_order, updated_at, recipe_id)
+VALUES (now(), 'Chuẩn bị nguyên liệu: Rửa sạch và cắt nhỏ hành lá. Chuẩn bị bánh phở, thịt bò và các gia vị cần thiết.', false, 1, now(), 1),
+       (now(), 'Nấu nước dùng: Đun sôi nước dùng với các gia vị như gừng, hành tím, quế, hồi để tạo hương vị đặc trưng cho phở.', false, 2, now(), 1),
+       (now(), 'Chế biến bánh mì: Cắt bánh mì thành hai phần, phết pate lên một mặt và xếp chả lụa cùng rau sống vào giữa.', false, 1, now(), 2),
+       (now(), 'Chuẩn bị sushi: Trải cơm sushi lên lá rong biển, thêm hải sản và cuộn chặt lại. Cắt thành từng miếng vừa ăn.', false, 1, now(), 3),
+       (now(), 'Nướng hamburger: Nặn thịt bò băm thành miếng dày và nướng trên bếp hoặc lò nướng cho đến khi chín.', false, 1, now(), 4),
+       (now(), 'Thêm phô mai lên trên miếng thịt bò vừa nướng, đợi phô mai tan chảy.', false, 2, now(), 4),
+       (now(), 'Kẹp thịt bò và phô mai vào bánh hamburger cùng rau củ tươi.', false, 3, now(), 4),
+       (now(), 'Trộn salad: Rửa sạch rau xanh và cắt nhỏ. Trộn với nước sốt yêu thích và trang trí với các loại hạt nếu muốn.', false, 1, now(), 5);
 
 INSERT INTO step_media (created_at, updated_at, media_id, step_id)
 VALUES (now(), now(), 2, 1),

@@ -38,9 +38,6 @@ public class Step {
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @Column(name = "estimated_time_minutes")
-    private Integer estimatedTimeMinutes;
-
     @OneToMany(mappedBy = "step", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<StepMedia> medias = new ArrayList<>();
