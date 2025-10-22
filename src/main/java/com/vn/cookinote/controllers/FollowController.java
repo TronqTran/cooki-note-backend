@@ -39,9 +39,13 @@ public class FollowController {
     }
 
     @DeleteMapping("/{targetId}")
-    public ResponseEntity<?> unfollow(@PathVariable Long targetId, Authentication auth) {
-        Long me = (Long) auth.getPrincipal();
-        followService.unfollow(me, targetId);
-        return ApiResponse.toResponseEntity(ApiStatus.OK,"Hủy theo dõi thành công");
+    public ResponseEntity<ApiResponse<Object>> unfollow(@PathVariable Long targetId, @AuthenticationPrincipal Jwt auth) {
+        String email = auth.getSubject();
+        User me = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        followService.unfollow(me.getId(), targetId);
+
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Hủy theo dõi thành công");
     }
 }

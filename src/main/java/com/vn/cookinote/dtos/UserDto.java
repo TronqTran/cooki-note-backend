@@ -10,8 +10,8 @@ import java.util.List;
 
 @Builder
 public record UserDto(Long id, String email, String username, String firstName, String lastName, LocalDate dateOfBirth,
-                      Gender gender, String biography, List<FollowDto> following,
-                      List<FollowDto> followers, List<UserMediaDto> medias) implements Serializable {
+                      Gender gender, String biography, List<FollowingDto> followings,
+                      List<FollowerDto> followers, List<UserMediaDto> medias) implements Serializable {
     public static UserDto fromEntity(User user) {
         if (user == null) return null;
         return UserDto.builder()
@@ -23,8 +23,8 @@ public record UserDto(Long id, String email, String username, String firstName, 
                 .biography(user.getBiography())
                 .dateOfBirth(user.getDateOfBirth())
                 .gender(user.getGender())
-                .following(FollowDto.fromEntities(user.getFollowing()))
-                .followers(FollowDto.fromEntities(user.getFollowers()))
+                .followings(FollowingDto.fromEntities(user.getFollowing()))
+                .followers(FollowerDto.fromEntities(user.getFollowers()))
                 .medias(UserMediaDto.fromEntities(user.getMedias()))
                 .build();
     }
