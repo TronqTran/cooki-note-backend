@@ -1,9 +1,12 @@
 package com.vn.cookinote.services.impl;
 
+import com.vn.cookinote.enums.NotificationType;
+import com.vn.cookinote.models.Notification;
 import com.vn.cookinote.models.Recipe;
 import com.vn.cookinote.models.RecipeLike;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.models.keys.RecipeLikeKey;
+import com.vn.cookinote.repositories.NotificationRepository;
 import com.vn.cookinote.repositories.RecipeLikeRepository;
 import com.vn.cookinote.repositories.RecipeRepository;
 import com.vn.cookinote.repositories.UserRepository;
@@ -23,6 +26,7 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public RecipeLike likeRecipe(Long recipeId, String email) {
@@ -36,6 +40,19 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
                     .user(user.get())
                     .recipe(recipe.get())
                     .build();
+
+            if (!user.get().getId().equals(recipe.get().getUser().getId())) {
+                Notification notification = Notification.builder()
+                        .recipient(recipe.get().getUser())
+                        .sender(user.get())
+                        .type(NotificationType.LIKE)
+                        .message(user.get().getUsername() + " đã thích công thức của bạn.")
+                        .targetId(recipe.get().getId())
+                        .isRead(false)
+                        .build();
+
+                notificationRepository.save(notification);
+            }
         }
         else {
             throw new IllegalArgumentException("Recipe or user not found");

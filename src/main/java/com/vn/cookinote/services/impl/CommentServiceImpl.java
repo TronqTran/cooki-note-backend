@@ -2,9 +2,11 @@ package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.CommentDto;
 import com.vn.cookinote.models.Comment;
+import com.vn.cookinote.models.Notification;
 import com.vn.cookinote.models.Recipe;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.repositories.CommentRepository;
+import com.vn.cookinote.repositories.NotificationRepository;
 import com.vn.cookinote.repositories.RecipeRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.services.CommentService;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,6 +23,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
 
     @Override
@@ -35,6 +39,21 @@ public class CommentServiceImpl implements CommentService {
             comment.setUser(user.get());
             comment.setDepth(commentParent.map(parent -> parent.getDepth() + 1).orElse(0));
             commentParent.ifPresent(comment::setParent);
+
+            if (!Objects.equals(user.get().getId(), recipe.get().getUser().getId())) {
+                // Tạo thông báo cho chủ bài viết
+                Notification notification = Notification.builder()
+                        .recipient(recipe.get().getUser())
+                        .sender(user.get())
+                        .type(com.vn.cookinote.enums.NotificationType.COMMENT)
+                        .message(user.get().getUsername() + " đã bình luận về bài viết của bạn.")
+                        .targetId(recipe.get().getId())
+                        .isRead(false)
+                        .build();
+
+                notificationRepository.save(notification);
+            }
+
             return commentRepository.save(comment);
         }
         return null;
