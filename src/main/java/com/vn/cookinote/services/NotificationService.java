@@ -6,4 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface NotificationService {
     Page<Notification> findMyNotifications(String email, Pageable pageable);
+
+    void markAsRead(Long id);
+
+    void markAllAsRead(String email);
 }

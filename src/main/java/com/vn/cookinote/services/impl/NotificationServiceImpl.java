@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +34,25 @@ public class NotificationServiceImpl implements NotificationService {
         User user = userRepository.findByEmail(email).orElse(null);
         assert user != null;
         return notificationRepository.findByRecipient(user, sortedByCreatedAt);
+    }
+
+    @Override
+    public void markAsRead(Long id) {
+        log.info("Marking notification with id: {} as read", id);
+        Optional<Notification> notification = notificationRepository.findById(id);
+        if (notification.isPresent()) {
+            notification.get().setIsRead(true);
+            notificationRepository.save(notification.get());
+        }
+    }
+
+    @Override
+    public void markAllAsRead(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        List<Notification> byRecipient = notificationRepository.findByRecipient(user);
+        for (Notification notification : byRecipient) {
+            notification.setIsRead(true);
+            notificationRepository.save(notification);
+        }
     }
 }

@@ -13,9 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/notification")
@@ -32,4 +30,18 @@ public class NotificationController {
         Page<Notification> notification = notificationService.findMyNotifications(email, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), NotificationDto.fromEntities(notification.getContent()));
     }
+
+    @PatchMapping("/mark-as-read/{id}")
+    public ResponseEntity<ApiResponse<Object>> markAsRead(@PathVariable Long id) {
+        notificationService.markAsRead(id);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Thông báo đã đươc đọc");
+    }
+
+    @PatchMapping("/mark-all-as-read")
+    public ResponseEntity<ApiResponse<Object>> markAllAsRead(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getSubject();
+        notificationService.markAllAsRead(email);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tất cả thông báo đã được đọc");
+    }
+
 }
