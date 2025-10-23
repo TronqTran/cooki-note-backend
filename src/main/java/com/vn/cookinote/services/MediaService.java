@@ -8,7 +8,10 @@ import java.io.IOException;
 
 public interface MediaService {
     Media uploadUserAvatar(MultipartFile file) throws IOException;
+
     Media uploadRecipeAvatar(MultipartFile file) throws IOException;
+
     Media uploadStepImage(MultipartFile file) throws IOException;
+
     Iterable<Media> findAll();
 }

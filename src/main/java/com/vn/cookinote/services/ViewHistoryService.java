@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ViewHistoryService {
     void saveViewHistory(String email, RecipeDto1 recipe);
+
     void removeIfExists(ZSetOperations<String, String> zset, String key, Long recipeId);
+
     List<RecipeDto1> getRecentViews(String email, int limit);
 }

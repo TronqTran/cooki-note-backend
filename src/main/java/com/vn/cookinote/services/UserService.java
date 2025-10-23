@@ -12,13 +12,22 @@ import java.util.Optional;
 
 public interface UserService {
     boolean isEmailExist(String email);
+
     boolean isUsernameExist(String username);
+
     Optional<User> findByEmail(String email);
+
     User changePassword(ChangePasswordRequest request, Principal connectedUser);
+
     User resetPassword(ResetPasswordRequest request);
+
     User uploadAvatar(MultipartFile avatar, String email) throws IOException;
+
     User updateProfile(UpdateProfileRequest request, String  email);
+
     User getAuthenticatedUser(Principal connectedUser);
+
     Iterable<User> searchUser(String keyword);
+
     Optional<User> findById(Long id);
 }

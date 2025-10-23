@@ -5,5 +5,6 @@ import com.vn.cookinote.dtos.requests.RegisterRequest;
 
 public interface AuthenticationService {
     void register(RegisterRequest registerRequest);
+
     String authenticate(AuthenticationRequest authenticationRequest);
 }
