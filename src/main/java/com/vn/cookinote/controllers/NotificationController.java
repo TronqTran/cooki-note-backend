@@ -38,10 +38,13 @@ public class NotificationController {
     }
 
     @PatchMapping("/mark-all-as-read")
-    public ResponseEntity<ApiResponse<Object>> markAllAsRead(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<ApiResponse<Object>> markAllAsRead(@AuthenticationPrincipal Jwt jwt,
+                                                             @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
+                                                             Pageable pageable) {
         String email = jwt.getSubject();
         notificationService.markAllAsRead(email);
-        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tất cả thông báo đã được đọc");
+        Page<Notification> notification = notificationService.findMyNotifications(email, pageable);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tất cả thông báo đã được đọc", NotificationDto.fromEntities(notification.getContent()));
     }
 
 }
