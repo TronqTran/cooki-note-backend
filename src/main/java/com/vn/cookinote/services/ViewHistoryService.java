@@ -11,4 +11,6 @@ public interface ViewHistoryService {
     void removeIfExists(ZSetOperations<String, String> zset, String key, Long recipeId);
 
     List<RecipeDto1> getRecentViews(String email, int limit);
+
+    void removeRecentViews(String email, Long recipeId);
 }

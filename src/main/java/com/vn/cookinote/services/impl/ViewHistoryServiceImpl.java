@@ -93,4 +93,17 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             return List.of();
         }
     }
+
+    @Override
+    public void removeRecentViews(String email, Long recipeId) {
+        if (email == null || email.isBlank() || recipeId == null) return;
+        String key = PREFIX + email;
+
+        try {
+            ZSetOperations<String, String> zset = redisTemplate.opsForZSet();
+            removeIfExists(zset, key, recipeId);
+        } catch (Exception ex) {
+            log.warn("Failed to remove recipe {} from view history for {}: {}", recipeId, email, ex.getMessage());
+        }
+    }
 }

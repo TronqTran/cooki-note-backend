@@ -9,6 +9,7 @@ import com.vn.cookinote.models.keys.RecipeMediaKey;
 import com.vn.cookinote.models.keys.StepMediaKey;
 import com.vn.cookinote.repositories.*;
 import com.vn.cookinote.services.RecipeService;
+import com.vn.cookinote.services.ViewHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientRepository ingredientRepository;
     private final RecipeLikeRepository recipeLikeRepository;
     private final StringRedisTemplate stringRedisTemplate;
+    private final ViewHistoryService viewHistoryService;
 
     @Override
     public Recipe createRecipe(RecipeDto recipeDto, String email) {
@@ -195,6 +197,8 @@ public class RecipeServiceImpl implements RecipeService {
             return false;
         recipe.setIsDeleted(true);
         recipeRepository.save(recipe);
+
+        viewHistoryService.removeRecentViews(email, recipe.getId());
         return true;
     }
 
