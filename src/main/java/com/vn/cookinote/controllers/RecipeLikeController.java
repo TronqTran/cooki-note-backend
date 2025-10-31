@@ -24,19 +24,19 @@ public class RecipeLikeController {
 
     @PostMapping("/recipe/{id}")
     public ResponseEntity<ApiResponse<Object>> likeRecipe(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        if (recipeLikeService.isRecipeLiked(id, email))
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        if (recipeLikeService.isRecipeLiked(id, userid))
             return ApiResponse.toResponseEntity(ApiStatus.BAD_REQUEST, "Bạn đã thích công thức này rồi", null);
-        RecipeLike recipeLike = recipeLikeService.likeRecipe(id, email);
+        RecipeLike recipeLike = recipeLikeService.likeRecipe(id, userid);
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, "Thích công thức thành công", RecipeLikeDto.fromEntity(recipeLike));
     }
 
     @DeleteMapping("/recipe/{id}")
     public ResponseEntity<ApiResponse<Object>> unlikeRecipe(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        if (!recipeLikeService.isRecipeLiked(id, email))
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        if (!recipeLikeService.isRecipeLiked(id, userid))
             return ApiResponse.toResponseEntity(ApiStatus.BAD_REQUEST, "Bạn chưa thích công thức này rồi", null);
-        RecipeLike recipeLike = recipeLikeService.unlikeRecipe(id, email);
+        RecipeLike recipeLike = recipeLikeService.unlikeRecipe(id, userid);
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Bỏ thích công thức thành công", RecipeLikeDto.fromEntity(recipeLike));
     }
 

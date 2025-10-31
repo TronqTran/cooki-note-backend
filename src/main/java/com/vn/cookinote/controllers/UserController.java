@@ -85,16 +85,16 @@ public class UserController {
 
     @PatchMapping("/upload-avatar")
     public ResponseEntity<ApiResponse<Object>> uploadAvatar(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Jwt jwt) throws IOException {
-        String email = jwt.getSubject();
-        User user = userService.uploadAvatar(file, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        User user = userService.uploadAvatar(file, userid);
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Avatar được tải lên thành công");
     }
 
     @PatchMapping("/update-profile")
     public ResponseEntity<ApiResponse<Object>> updateProfile(@RequestBody UpdateProfileRequest request, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        User user = userService.updateProfile(request, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        User user = userService.updateProfile(request, userid);
         // Prepare the user information to return
         UserDto userInfo = UserDto.fromEntity(user);
 

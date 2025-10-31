@@ -20,15 +20,15 @@ public class CommentController {
 
     @PostMapping("/recipe/{id}")
     public ResponseEntity<ApiResponse<CommentDto>> addCommentToRecipe(@PathVariable Long id, @RequestBody CommentDto commentDto, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        Comment comment = commentService.addCommentToRecipe(id, email, commentDto);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Comment comment = commentService.addCommentToRecipe(id, userid, commentDto);
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, ApiStatus.CREATED.getMessage(), CommentDto.fromEntity(comment));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Object>> deleteComment(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        boolean isDeleted = commentService.deleteComment(id, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        boolean isDeleted = commentService.deleteComment(id, userid);
         if (isDeleted) {
             return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage());
         }

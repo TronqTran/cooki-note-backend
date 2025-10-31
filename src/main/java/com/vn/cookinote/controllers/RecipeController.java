@@ -30,8 +30,8 @@ public class RecipeController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse<RecipeDto2>> createRecipe(@RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        Recipe recipe = recipeService.createRecipe(recipeDto, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Recipe recipe = recipeService.createRecipe(recipeDto, userid);
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, ApiStatus.CREATED.getMessage(), RecipeDto2.fromEntity(recipe));
     }
 
@@ -48,8 +48,8 @@ public class RecipeController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<RecipeDto2>> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        Recipe recipe = recipeService.updateRecipe(recipeDto, id, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Recipe recipe = recipeService.updateRecipe(recipeDto, id, userid);
         if (recipe == null) {
             return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, ApiStatus.NOT_FOUND.getMessage());
         }
@@ -74,8 +74,8 @@ public class RecipeController {
     public ResponseEntity<ApiResponse<List<RecipeDto1>>> getLikedRecipes(@AuthenticationPrincipal Jwt jwt,
                                                                          @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
                                                                          Pageable pageable) {
-        String email = jwt.getSubject();
-        Page<Recipe> recipe = recipeService.findLikedRecipes(email, pageable);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Page<Recipe> recipe = recipeService.findLikedRecipes(userid, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), RecipeDto1.fromEntities(recipe.getContent()));
     }
 
@@ -83,15 +83,15 @@ public class RecipeController {
     public ResponseEntity<ApiResponse<List<RecipeDto1>>> getMyRecipes(@AuthenticationPrincipal Jwt jwt,
                                                                       @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
                                                                       Pageable pageable) {
-        String email = jwt.getSubject();
-        Page<Recipe> recipe = recipeService.findMyRecipes(email, pageable);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Page<Recipe> recipe = recipeService.findMyRecipes(userid, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), RecipeDto1.fromEntities(recipe.getContent()));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteRecipe(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
-        String email = jwt.getSubject();
-        boolean isDeleted = recipeService.deleteRecipe(id, email);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        boolean isDeleted = recipeService.deleteRecipe(id, userid);
         if (!isDeleted) {
             return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, ApiStatus.NOT_FOUND.getMessage());
         }

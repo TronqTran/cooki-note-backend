@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface RecipeService {
-    Recipe createRecipe(RecipeDto recipeDto, String email);
+    Recipe createRecipe(RecipeDto recipeDto, Long userId);
 
     Recipe findRecipeById(Long id);
 
@@ -14,13 +14,13 @@ public interface RecipeService {
 
     Page<Recipe> searchRecipes(String keyword, Pageable pageable);
 
-    Page<Recipe> findLikedRecipes(String email, Pageable pageable);
+    Page<Recipe> findLikedRecipes(Long userId, Pageable pageable);
 
-    boolean deleteRecipe(Long id, String email);
+    boolean deleteRecipe(Long id, Long userId);
 
-    Recipe updateRecipe(RecipeDto recipeDto, Long id, String email);
+    Recipe updateRecipe(RecipeDto recipeDto, Long id, Long userId);
 
-    Page<Recipe> findMyRecipes(String email, Pageable pageable);
+    Page<Recipe> findMyRecipes(Long userId, Pageable pageable);
 
     Page<Recipe> findRecipesByCategory(Long id, Pageable pageable);
 

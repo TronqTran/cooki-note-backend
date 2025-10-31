@@ -24,14 +24,14 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Override
-    public Page<Notification> findMyNotifications(String email, Pageable pageable) {
-        log.info("Finding my notifications by email: {}", email);
+    public Page<Notification> findMyNotifications(Long userId, Pageable pageable) {
+        log.info("Finding my notifications by userId: {}", userId);
         Pageable sortedByCreatedAt = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         assert user != null;
         return notificationRepository.findByRecipient(user, sortedByCreatedAt);
     }
@@ -47,8 +47,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void markAllAsRead(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
+    public void markAllAsRead(Long userId) {
+        log.info("Marking all notifications as read for userId: {}", userId);
+        User user = userRepository.findById(userId).orElse(null);
         List<Notification> byRecipient = notificationRepository.findByRecipient(user);
         for (Notification notification : byRecipient) {
             notification.setIsRead(true);

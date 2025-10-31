@@ -4,7 +4,7 @@ import com.vn.cookinote.dtos.CommentDto;
 import com.vn.cookinote.models.Comment;
 
 public interface CommentService {
-    Comment addCommentToRecipe(Long id, String email, CommentDto commentDto);
+    Comment addCommentToRecipe(Long id, Long userId, CommentDto commentDto);
 
-    boolean deleteComment(Long id, String email);
+    boolean deleteComment(Long id, Long userId);
 }

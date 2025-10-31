@@ -32,40 +32,40 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
 
     @Override
-    public Page<ShoppingList> findMyShoppingLists(String email, Pageable pageable) {
-        log.info("Finding my shopping lists by email: {}", email);
+    public Page<ShoppingList> findMyShoppingLists(Long userId, Pageable pageable) {
+        log.info("Finding my shopping lists by userId: {}", userId);
         Pageable sortedPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
         return shoppingListRepository.findByIsDeletedAndUser(false, user, sortedPageable);
     }
 
     @Override
-    public Page<ShoppingList> findMyShoppingListsToday(String email, Pageable pageable) {
-        log.info("Finding my shopping lists today by email: {}", email);
+    public Page<ShoppingList> findMyShoppingListsToday(Long userId, Pageable pageable) {
+        log.info("Finding my shopping lists today by userId: {}", userId);
         Pageable sortedPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
                 );
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
         return shoppingListRepository.findByIsDeletedAndUserAndPlannedDate(false, user, LocalDate.now(), sortedPageable);
     }
 
     @Override
-    public ShoppingList createFromRecipe(String email, Long recipeId, LocalDate plannedDate) {
+    public ShoppingList createFromRecipe(Long userId, Long recipeId, LocalDate plannedDate) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new EntityNotFoundException("Recipe not found: " + recipeId));
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
         ShoppingList shoppingList = ShoppingList.builder()
                 .user(user)

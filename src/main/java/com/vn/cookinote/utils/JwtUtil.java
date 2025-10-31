@@ -64,6 +64,7 @@ public class JwtUtil {
                 .subject(user.getEmail())
                 .claim("profile", profile)
                 .claim("authorities", authoritiesList)
+                .claim("userId", user.getId())
                 .build();
 
         // Create the JWS header with the specified algorithm

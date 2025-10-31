@@ -6,11 +6,11 @@ import com.vn.cookinote.models.User;
 import java.util.List;
 
 public interface RecipeLikeService {
-    RecipeLike likeRecipe(Long recipeId, String email);
+    RecipeLike likeRecipe(Long recipeId, Long userId);
 
-    RecipeLike unlikeRecipe(Long recipeId, String email);
+    RecipeLike unlikeRecipe(Long recipeId, Long userId);
 
-    boolean isRecipeLiked(Long recipeId, String email);
+    boolean isRecipeLiked(Long recipeId, Long userId);
 
     List<User> getRecipeLikeUser(Long recipeId);
 }

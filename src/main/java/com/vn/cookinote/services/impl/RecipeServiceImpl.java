@@ -37,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final ViewHistoryService viewHistoryService;
 
     @Override
-    public Recipe createRecipe(RecipeDto recipeDto, String email) {
+    public Recipe createRecipe(RecipeDto recipeDto, Long userId) {
 
         // Log recipe creation
         log.info("Creating recipe: {}", recipeDto.title());
@@ -54,8 +54,8 @@ public class RecipeServiceImpl implements RecipeService {
                 .viewsCount(0L)
                 .build();
 
-        // Find the user by email
-        userRepository.findByEmail(email).ifPresent(recipe::setUser);
+        // Find the user by ID
+        userRepository.findById(userId).ifPresent(recipe::setUser);
 
         // Find a category
         if (recipeDto.category() != null && recipeDto.category().id() != null)
@@ -167,10 +167,10 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> findLikedRecipes(String email, Pageable pageable) {
-        log.info("Finding liked recipes by email: {}", email);
+    public Page<Recipe> findLikedRecipes(Long userId, Pageable pageable) {
+        log.info("Finding liked recipes by ID: {}", userId);
         Page<Recipe> recipes = Page.empty();
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         assert user != null;
         List<RecipeLike> likeList = recipeLikeRepository.findByUserId(user.getId());
         if (likeList.isEmpty()) return recipes;
@@ -187,9 +187,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public boolean deleteRecipe(Long id, String email) {
-        log.info("Deleting recipe by id: {} and email: {}", id, email);
-        User user = userRepository.findByEmail(email).orElse(null);
+    public boolean deleteRecipe(Long id, Long userId) {
+        log.info("Deleting recipe by id: {} and userId: {}", id, userId);
+        User user = userRepository.findById(userId).orElse(null);
         Recipe recipe = recipeRepository.findById(id).orElse(null);
         assert user != null;
         assert recipe != null;
@@ -198,16 +198,18 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setIsDeleted(true);
         recipeRepository.save(recipe);
 
-        viewHistoryService.removeRecentViews(email, recipe.getId());
+        viewHistoryService.removeRecentViews(user.getEmail(), recipe.getId());
         return true;
     }
 
     @Override
-    public Recipe updateRecipe(RecipeDto recipeDto, Long id, String email) {
+    public Recipe updateRecipe(RecipeDto recipeDto, Long id, Long userId) {
         log.info("Updating recipe by id: {}", recipeDto.id());
         Recipe recipe = recipeRepository.findById(id).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         if (recipe == null) return null;
-        if (!recipe.getUser().getEmail().equals(email)) return null;
+        assert user != null;
+        if (!recipe.getUser().getEmail().equals(user.getEmail())) return null;
 
         recipe.setTitle(recipeDto.title());
         recipe.setDescription(recipeDto.description());
@@ -301,14 +303,14 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> findMyRecipes(String email, Pageable pageable) {
-        log.info("Finding my recipes by email: {}", email);
+    public Page<Recipe> findMyRecipes(Long userId, Pageable pageable) {
+        log.info("Finding my recipes by userId: {}", userId);
         Pageable sortedByCreatedAt = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         assert user != null;
         return recipeRepository.findByIsDeletedAndUser(false, user, sortedByCreatedAt);
     }

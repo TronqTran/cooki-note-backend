@@ -27,18 +27,18 @@ public class ShoppingListController {
     public ResponseEntity<ApiResponse<Object>> getMyShoppingLists(@AuthenticationPrincipal Jwt jwt,
                                                                   @PageableDefault(size = 20, sort = {"createdAt"}, direction = org.springframework.data.domain.Sort.Direction.DESC)
                                                                   Pageable pageable) {
-        String email = jwt.getSubject();
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
 
-        Page<ShoppingList> shoppingLists = shoppingListService.findMyShoppingLists(email, pageable);
+        Page<ShoppingList> shoppingLists = shoppingListService.findMyShoppingLists(userid, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), ShoppingListDto1.fromEntities(shoppingLists.getContent()));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<Object>> addToShoppingList(@AuthenticationPrincipal Jwt jwt,
                                                                  @RequestBody ShoppingListDto shoppingListDto) {
-        String email = jwt.getSubject();
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
 
-        ShoppingList fromRecipe = shoppingListService.createFromRecipe(email, shoppingListDto.recipeId(), shoppingListDto.plannedDate() != null ? shoppingListDto.plannedDate() : LocalDate.now());
+        ShoppingList fromRecipe = shoppingListService.createFromRecipe(userid, shoppingListDto.recipeId(), shoppingListDto.plannedDate() != null ? shoppingListDto.plannedDate() : LocalDate.now());
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, ApiStatus.CREATED.getMessage(), ShoppingListDto1.fromEntity(fromRecipe));
     }
 

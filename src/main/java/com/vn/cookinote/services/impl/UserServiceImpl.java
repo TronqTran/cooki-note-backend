@@ -79,10 +79,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User uploadAvatar(MultipartFile avatar, String email) throws IOException {
+    public User uploadAvatar(MultipartFile avatar, Long userId) throws IOException {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
 
         // Upload the new avatar
         Media media = mediaService.uploadRecipeAvatar(avatar);
@@ -98,10 +98,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateProfile(UpdateProfileRequest request, String email) {
+    public User updateProfile(UpdateProfileRequest request, Long userId) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
 
         log.info("Updating profile for user: {}", user.getEmail());
 

@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public Comment addCommentToRecipe(Long id, String email, CommentDto commentDto) {
+    public Comment addCommentToRecipe(Long id, Long userId, CommentDto commentDto) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(userId);
         Optional<Comment> commentParent = commentDto.parent() != null ? commentRepository.findById(commentDto.parent().id()) : Optional.empty();
 
         if (recipe.isPresent() && user.isPresent()) {
@@ -60,8 +60,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
 @Override
-    public boolean deleteComment(Long id, String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
+    public boolean deleteComment(Long id, Long userid) {
+        User user = userRepository.findById(userid).orElse(null);
         Comment comment = commentRepository.findById(id).orElse(null);
         assert user != null;
         assert comment != null;

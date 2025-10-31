@@ -29,10 +29,10 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
     private final NotificationRepository notificationRepository;
 
     @Override
-    public RecipeLike likeRecipe(Long recipeId, String email) {
-        log.info("Like recipe by id: {} and email: {}", recipeId, email);
+    public RecipeLike likeRecipe(Long recipeId, Long userId) {
+        log.info("Like recipe by id: {} and userId: {}", recipeId, userId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(userId);
         RecipeLike recipeLike;
         if (recipe.isPresent() && user.isPresent()) {
             recipeLike = RecipeLike.builder()
@@ -61,10 +61,10 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
     }
 
     @Override
-    public RecipeLike unlikeRecipe(Long recipeId, String email) {
-        log.info("Unlike recipe by id: {} and email: {}", recipeId, email);
+    public RecipeLike unlikeRecipe(Long recipeId, Long userId) {
+        log.info("Unlike recipe by id: {} and userId: {}", recipeId, userId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findById(userId);
         if (recipe.isPresent() && user.isPresent()) {
             RecipeLikeKey key = new RecipeLikeKey(recipe.get().getId(), user.get().getId());
             return recipeLikeRepository.findById(key)
@@ -78,9 +78,9 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
     }
 
     @Override
-    public boolean isRecipeLiked(Long recipeId, String email) {
-        if (recipeId == null || email == null) return false;
-        Optional<User> user = userRepository.findByEmail(email);
+    public boolean isRecipeLiked(Long recipeId, Long userId) {
+        if (recipeId == null || userId == null) return false;
+        Optional<User> user = userRepository.findById(userId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
         return user.isPresent() && recipe.isPresent() && recipeLikeRepository.findById(new RecipeLikeKey(recipe.get().getId(), user.get().getId())).isPresent();
     }

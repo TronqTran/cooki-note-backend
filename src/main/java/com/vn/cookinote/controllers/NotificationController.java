@@ -26,8 +26,8 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<Object>> getNotification(@AuthenticationPrincipal Jwt jwt,
                                                                @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
                                                                Pageable pageable) {
-        String email = jwt.getSubject();
-        Page<Notification> notification = notificationService.findMyNotifications(email, pageable);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        Page<Notification> notification = notificationService.findMyNotifications(userid, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), NotificationDto.fromEntities(notification.getContent()));
     }
 
@@ -41,9 +41,9 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<Object>> markAllAsRead(@AuthenticationPrincipal Jwt jwt,
                                                              @PageableDefault(size = 20, sort = {"createdAt"}, direction = Sort.Direction.DESC)
                                                              Pageable pageable) {
-        String email = jwt.getSubject();
-        notificationService.markAllAsRead(email);
-        Page<Notification> notification = notificationService.findMyNotifications(email, pageable);
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        notificationService.markAllAsRead(userid);
+        Page<Notification> notification = notificationService.findMyNotifications(userid, pageable);
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Tất cả thông báo đã được đọc", NotificationDto.fromEntities(notification.getContent()));
     }
 

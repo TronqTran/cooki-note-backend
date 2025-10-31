@@ -21,9 +21,9 @@ public interface UserService {
 
     User resetPassword(ResetPasswordRequest request);
 
-    User uploadAvatar(MultipartFile avatar, String email) throws IOException;
+    User uploadAvatar(MultipartFile avatar, Long userId) throws IOException;
 
-    User updateProfile(UpdateProfileRequest request, String  email);
+    User updateProfile(UpdateProfileRequest request, Long userId);
 
     User getAuthenticatedUser(Principal connectedUser);
 
