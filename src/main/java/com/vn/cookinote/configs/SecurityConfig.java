@@ -39,10 +39,11 @@ public class SecurityConfig {
                                                    CustomOAuth2UserService customOAuth2UserService,
                                                    CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
                                                    CustomLogoutHandler customLogoutHandler,
-                                                   CustomAuthenticationFailureHandler customAuthenticationFailureHandler) throws Exception {
+                                                   CustomAuthenticationFailureHandler customAuthenticationFailureHandler,
+                                                   CorsConfigurationSource corsConfigurationSource) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(corsConfigurer ->
-                corsConfigurer.configurationSource(corsConfigurationSource()));
+                corsConfigurer.configurationSource(corsConfigurationSource));
         http.sessionManagement(managementConfigurer ->
                 managementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);
@@ -85,16 +86,4 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }
