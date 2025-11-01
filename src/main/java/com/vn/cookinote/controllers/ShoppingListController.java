@@ -42,4 +42,11 @@ public class ShoppingListController {
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, ApiStatus.CREATED.getMessage(), ShoppingListDto1.fromEntity(fromRecipe));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Object>> deleteShoppingList(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        shoppingListService.deleteShoppingList(id, userid);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage());
+    }
+
 }

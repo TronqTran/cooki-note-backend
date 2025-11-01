@@ -12,4 +12,6 @@ public interface ShoppingListService {
     Page<ShoppingList> findMyShoppingListsToday(Long userId, Pageable pageable);
 
     ShoppingList createFromRecipe(Long userId, Long recipeId, LocalDate plannedDate);
+
+    ShoppingList deleteShoppingList(Long id, Long userId);
 }

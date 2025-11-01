@@ -101,4 +101,19 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         // option: reload shoppingList with items if needed
         return shoppingListRepository.findById(shoppingList.getId()).orElse(shoppingList);
     }
+
+    @Override
+    public ShoppingList deleteShoppingList(Long id, Long userId) {
+        log.info("Deleting shopping list by id: {} and userId: {}", id, userId);
+        User user = userRepository.findById(userId).orElse(null);
+        ShoppingList shoppingList = shoppingListRepository.findById(id).orElse(null);
+        assert user != null;
+        assert shoppingList != null;
+        if (user.equals(shoppingList.getUser())) {
+            shoppingList.setIsDeleted(true);
+            shoppingListRepository.save(shoppingList);
+            return shoppingList;
+        }
+        return null;
+    }
 }
