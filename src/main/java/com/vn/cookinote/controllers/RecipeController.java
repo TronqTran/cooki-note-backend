@@ -19,7 +19,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/recipes")
@@ -120,5 +124,39 @@ public class RecipeController {
         String email = jwt.getSubject();
         List<RecipeDto1> recentViews = viewHistoryService.getRecentViews(email, limit);
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), recentViews);
+    }
+
+    @GetMapping("/stats/created-between")
+    public ResponseEntity<ApiResponse<Object>> getRecipesCreatedBetween(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam("createdAtAfter") String createdAtAfter,
+            @RequestParam("createdAtBefore") String createdAtBefore) {
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        LocalDateTime createdAtAfterDate = LocalDate.parse(createdAtAfter).atStartOfDay();
+        LocalDateTime createdAtBeforeDate = LocalDate.parse(createdAtBefore).atTime(23, 59, 59);
+        List<Recipe> recipes = recipeService.findRecipeCreatedBetween(userid, createdAtAfterDate, createdAtBeforeDate);
+        if (recipes.isEmpty()) {
+            return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, ApiStatus.NOT_FOUND.getMessage());
+        }
+
+        int recipeCount = recipes.size();
+        long totalLikes = recipes.stream()
+                .mapToLong(r -> r.getLikes() == null ? 0L : r.getLikes().size())
+                .sum();
+        long totalComments = recipes.stream()
+                .mapToLong(r -> r.getComments() == null ? 0L : r.getComments().size())
+                .sum();
+        long totalViews = recipes.stream()
+                .mapToLong(r -> r.getViewsCount() == null ? 0L : r.getViewsCount())
+                .sum();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("recipeCount", recipeCount);
+        stats.put("totalLikes", totalLikes);
+        stats.put("totalComments", totalComments);
+        stats.put("totalViews", totalViews);
+        stats.put("recipes", RecipeDto1.fromEntities(recipes));
+
+        return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), stats);
     }
 }

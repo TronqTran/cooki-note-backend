@@ -20,6 +20,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -335,5 +336,15 @@ public class RecipeServiceImpl implements RecipeService {
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
         return recipeRepository.findByIsDeletedAndIsPublicAndUserId(false, true, id, sortedByCreatedAt);
+    }
+
+    @Override
+    public List<Recipe> findRecipeCreatedBetween(Long userId, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore) {
+        log.info("Finding recipes created between dates: {} and {}", createdAtAfter, createdAtBefore);
+        User user = userRepository.findById(userId).orElse(null);
+        assert user != null;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        return recipeRepository.findByIsDeletedAndUserAndCreatedAtBetween(false, user, createdAtAfter, createdAtBefore, sort);
     }
 }

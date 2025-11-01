@@ -13,32 +13,33 @@ public record RecipeDto2(Long id, String title, String description, Integer cook
                          Difficulty difficulty, Long viewsCount, LocalDateTime createdAt, LocalDateTime updatedAt,
                          UserDto1 user, CategoryDto category, List<StepDto> steps,
                          List<RecipeIngredientDto> ingredients, List<CommentDto> comments, List<RecipeLikeDto> likes,
-                         List<RecipeMediaDto> medias) implements Serializable {
-    public static RecipeDto2 fromEntity(Recipe entity) {
-        if (entity == null) return null;
+                         List<RecipeMediaDto> medias, Boolean isPublic) implements Serializable {
+    public static RecipeDto2 fromEntity(Recipe recipe) {
+        if (recipe == null) return null;
         return RecipeDto2.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .cookTimeMinutes(entity.getCookTimeMinutes())
-                .servings(entity.getServings())
-                .difficulty(entity.getDifficulty())
-                .viewsCount(entity.getViewsCount())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .user(UserDto1.fromEntity(entity.getUser()))
-                .category(CategoryDto.fromEntity(entity.getCategory()))
-                .steps(StepDto.fromEntities(entity.getSteps()))
-                .ingredients(RecipeIngredientDto.fromEntities(entity.getIngredients()))
-                .comments(CommentDto.fromEntities(entity.getComments()))
-                .likes(RecipeLikeDto.fromEntities(entity.getLikes()))
-                .medias(RecipeMediaDto.fromEntities(entity.getMedias()))
+                .id(recipe.getId())
+                .title(recipe.getTitle())
+                .description(recipe.getDescription())
+                .cookTimeMinutes(recipe.getCookTimeMinutes())
+                .servings(recipe.getServings())
+                .difficulty(recipe.getDifficulty())
+                .viewsCount(recipe.getViewsCount())
+                .createdAt(recipe.getCreatedAt())
+                .updatedAt(recipe.getUpdatedAt())
+                .user(UserDto1.fromEntity(recipe.getUser()))
+                .category(CategoryDto.fromEntity(recipe.getCategory()))
+                .steps(StepDto.fromEntities(recipe.getSteps()))
+                .ingredients(RecipeIngredientDto.fromEntities(recipe.getIngredients()))
+                .comments(CommentDto.fromEntities(recipe.getComments()))
+                .likes(RecipeLikeDto.fromEntities(recipe.getLikes()))
+                .medias(RecipeMediaDto.fromEntities(recipe.getMedias()))
+                .isPublic(recipe.getIsPublic())
                 .build(
         );
     }
 
-    public static List<RecipeDto2> fromEntities(List<Recipe> entities) {
-        if (entities == null) return null;
-        return entities.stream().map(RecipeDto2::fromEntity).toList();
+    public static List<RecipeDto2> fromEntities(List<Recipe> recipes) {
+        if (recipes == null) return null;
+        return recipes.stream().map(RecipeDto2::fromEntity).toList();
     }
 }

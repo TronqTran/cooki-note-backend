@@ -5,6 +5,9 @@ import com.vn.cookinote.models.Recipe;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface RecipeService {
     Recipe createRecipe(RecipeDto recipeDto, Long userId);
 
@@ -25,4 +28,6 @@ public interface RecipeService {
     Page<Recipe> findRecipesByCategory(Long id, Pageable pageable);
 
     Page<Recipe> findRecipesByUserId(Long id, Pageable pageable);
+
+    List<Recipe> findRecipeCreatedBetween(Long userId, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore);
 }
