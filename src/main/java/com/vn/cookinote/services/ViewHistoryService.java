@@ -13,4 +13,7 @@ public interface ViewHistoryService {
     List<RecipeDto1> getRecentViews(String email, int limit);
 
     void removeRecentViews(String email, Long recipeId);
+
+    void removeRecipeFromAllRecentViews(Long recipeId);
+
 }

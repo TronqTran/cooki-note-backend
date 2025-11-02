@@ -200,6 +200,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipeRepository.save(recipe);
 
         viewHistoryService.removeRecentViews(user.getEmail(), recipe.getId());
+        viewHistoryService.removeRecipeFromAllRecentViews(recipe.getId());
         return true;
     }
 
