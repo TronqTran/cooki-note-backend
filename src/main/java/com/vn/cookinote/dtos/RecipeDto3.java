@@ -1,0 +1,35 @@
+package com.vn.cookinote.dtos;
+
+import com.vn.cookinote.enums.Difficulty;
+import com.vn.cookinote.models.Recipe;
+import lombok.Builder;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Builder
+public record RecipeDto3(Long id, String title, String description, Integer cookTimeMinutes, Integer servings,
+                         Difficulty difficulty, Long viewsCount, UserDto1 user, List<CommentDto> comments,
+                         List<RecipeLikeDto> likes, List<RecipeMediaDto> medias) implements Serializable {
+    public static RecipeDto3 fromEntity(Recipe recipe) {
+        if (recipe == null) return null;
+        return RecipeDto3.builder()
+                .id(recipe.getId())
+                .title(recipe.getTitle())
+                .description(recipe.getDescription())
+                .cookTimeMinutes(recipe.getCookTimeMinutes())
+                .servings(recipe.getServings())
+                .difficulty(recipe.getDifficulty())
+                .user(UserDto1.fromEntity(recipe.getUser()))
+                .medias(RecipeMediaDto.fromEntities(recipe.getMedias()))
+                .comments(CommentDto.fromEntities(recipe.getComments()))
+                .likes(RecipeLikeDto.fromEntities(recipe.getLikes()))
+                .viewsCount(recipe.getViewsCount())
+                .build();
+    }
+
+    public static List<RecipeDto3> fromEntities(List<Recipe> recipes) {
+        if (recipes == null) return null;
+        return recipes.stream().map(RecipeDto3::fromEntity).toList();
+    }
+}
