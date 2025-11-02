@@ -4,6 +4,8 @@ import com.vn.cookinote.dtos.requests.AuthenticationRequest;
 import com.vn.cookinote.dtos.requests.RegisterRequest;
 import com.vn.cookinote.dtos.responses.ApiResponse;
 import com.vn.cookinote.enums.ApiStatus;
+import com.vn.cookinote.enums.Status;
+import com.vn.cookinote.models.User;
 import com.vn.cookinote.services.AuthenticationService;
 import com.vn.cookinote.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -53,6 +56,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<ApiResponse<Object>> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
+
+        // Check if the user is deactivated
+        Optional<User> user = userService.findByEmail(authenticationRequest.email());
+        if (user.isPresent() && user.get().getStatus() == Status.DEACTIVATED) {
+            return ApiResponse.toResponseEntity(ApiStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa");
+        }
 
         // Authenticate the user
         try {

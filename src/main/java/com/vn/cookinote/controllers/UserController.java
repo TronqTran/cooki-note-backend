@@ -9,7 +9,9 @@ import com.vn.cookinote.dtos.responses.ApiResponse;
 import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.services.OtpService;
+import com.vn.cookinote.services.TokenBlacklistService;
 import com.vn.cookinote.services.UserService;
+import com.vn.cookinote.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +33,8 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final OtpService otpService;
+    private final JwtUtil jwtUtil;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @PatchMapping("/change-password")
     public ResponseEntity<ApiResponse<Object>> changePassword(
@@ -129,4 +133,12 @@ public class UserController {
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Tìm kiếm người dùng thành công", userDTOS);
     }
 
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Object>> deleteUser(@AuthenticationPrincipal Jwt jwt) {
+        Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
+        userService.deactivateUser(userid);
+        long expirationSeconds = jwtUtil.getExpirationFromToken(jwt.getTokenValue());
+        tokenBlacklistService.blacklistToken(jwt.getTokenValue(), expirationSeconds);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tài khoản đã được vô hiệu hóa thành công");
+    }
 }

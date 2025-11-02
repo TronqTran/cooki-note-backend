@@ -30,4 +30,6 @@ public interface UserService {
     Iterable<User> searchUser(String keyword);
 
     Optional<User> findById(Long id);
+
+    User deactivateUser(Long userId);
 }

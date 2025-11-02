@@ -4,6 +4,7 @@ import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
 import com.vn.cookinote.enums.ProfileMediaType;
+import com.vn.cookinote.enums.Status;
 import com.vn.cookinote.models.Media;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.models.UserMedia;
@@ -139,5 +140,13 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findById(Long id) {
         return Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id)));
+    }
+
+    @Override
+    public User deactivateUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
+        user.setStatus(Status.DEACTIVATED);
+        return userRepository.save(user);
     }
 }
