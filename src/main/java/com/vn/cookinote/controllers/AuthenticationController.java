@@ -59,7 +59,7 @@ public class AuthenticationController {
 
         // Check if the user is deactivated
         Optional<User> user = userService.findByEmail(authenticationRequest.email());
-        if (user.isPresent() && user.get().getStatus() == Status.DEACTIVATED) {
+        if (user.isPresent() && user.get().getStatus() != Status.ACTIVE) {
             return ApiResponse.toResponseEntity(ApiStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa");
         }
 

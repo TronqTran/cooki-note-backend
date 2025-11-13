@@ -18,7 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
         SELECT u FROM User u
-        WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))
+        WHERE u.status = 'ACTIVE'
+        AND LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))
         """)
     Iterable<User> searchByUsername(@Param("username") String username);
 }

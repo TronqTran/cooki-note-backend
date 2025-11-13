@@ -147,6 +147,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
         user.setStatus(Status.DEACTIVATED);
+        user.setUsername(user.getUsername() + "_deactivated_" + System.currentTimeMillis());
+        user.setEmail(user.getEmail() + "_deactivated_" + System.currentTimeMillis());
         return userRepository.save(user);
     }
 }
