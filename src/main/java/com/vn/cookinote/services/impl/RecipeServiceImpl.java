@@ -314,7 +314,7 @@ public class RecipeServiceImpl implements RecipeService {
         );
         User user = userRepository.findById(userId).orElse(null);
         assert user != null;
-        return recipeRepository.findByIsDeletedAndUser(false, user, sortedByCreatedAt);
+        return recipeRepository. findByIsDeletedAndUser(false, user, sortedByCreatedAt);
     }
 
     @Override
