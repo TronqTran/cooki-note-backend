@@ -2,6 +2,7 @@ package com.vn.cookinote.controllers;
 
 import com.vn.cookinote.dtos.UserDto;
 import com.vn.cookinote.dtos.UserDto1;
+import com.vn.cookinote.dtos.UserDto2;
 import com.vn.cookinote.dtos.requests.ChangePasswordRequest;
 import com.vn.cookinote.dtos.requests.ResetPasswordRequest;
 import com.vn.cookinote.dtos.requests.UpdateProfileRequest;
@@ -13,7 +14,12 @@ import com.vn.cookinote.services.TokenBlacklistService;
 import com.vn.cookinote.services.UserService;
 import com.vn.cookinote.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -127,7 +133,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<UserDto1>>> searchUser(@RequestParam("keyword") String keyword) {
-        Iterable<User> users = userService.searchUser(keyword);
+        Iterable<User> users = userService.searchUserActive(keyword);
         List<UserDto1> userDTOS = new ArrayList<>();
         users.forEach(user -> userDTOS.add(UserDto1.fromEntity(user)));
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Tìm kiếm người dùng thành công", userDTOS);

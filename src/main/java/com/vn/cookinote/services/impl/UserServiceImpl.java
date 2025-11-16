@@ -17,6 +17,10 @@ import com.vn.cookinote.services.OtpService;
 import com.vn.cookinote.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -132,8 +136,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Iterable<User> searchUser(String keyword) {
-        return userRepository.searchByUsername(keyword);
+    public Iterable<User> searchUserActive(String keyword) {
+        return userRepository.searchByUsernameActive(keyword);
     }
 
     @Override
@@ -147,8 +151,40 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
         user.setStatus(Status.DEACTIVATED);
-        user.setUsername(user.getUsername() + "_deactivated_" + System.currentTimeMillis());
         user.setEmail(user.getEmail() + "_deactivated_" + System.currentTimeMillis());
         return userRepository.save(user);
+    }
+
+    @Override
+    public Page<User> findAllUsers(Pageable pageable) {
+        Pageable sortedByCreatedAt = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public Iterable<User> searchUserAll(String keyword) {
+        return userRepository.findByUsername(keyword);
+    }
+
+    @Override
+    public User activateUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
+        user.setStatus(Status.ACTIVE);
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public User banUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
+        user.setStatus(Status.BANNED);
+        userRepository.save(user);
+        return user;
     }
 }
