@@ -206,7 +206,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe updateRecipe(RecipeDto recipeDto, Long id, Long userId) {
-        log.info("Updating recipe by id: {}", recipeDto.id());
+        log.info("Updating recipe by id: {}", id);
         Recipe recipe = recipeRepository.findById(id).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
         if (recipe == null) return null;
@@ -314,7 +314,7 @@ public class RecipeServiceImpl implements RecipeService {
         );
         User user = userRepository.findById(userId).orElse(null);
         assert user != null;
-        return recipeRepository. findByIsDeletedAndUser(false, user, sortedByCreatedAt);
+        return recipeRepository.findByIsDeletedAndIsPublicAndUserId(false, true, user.getId(), sortedByCreatedAt);
     }
 
     @Override
@@ -346,6 +346,45 @@ public class RecipeServiceImpl implements RecipeService {
         assert user != null;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        return recipeRepository.findByIsDeletedAndUserAndCreatedAtBetween(false, user, createdAtAfter, createdAtBefore, sort);
+        return recipeRepository.findByIsDeletedAndIsPublicAndUserAndCreatedAtBetween(
+                false,
+                true,
+                user,
+                createdAtAfter,
+                createdAtBefore,
+                sort
+        );
+    }
+
+    @Override
+    public Page<Recipe> findAllRecipesByAdmin(Pageable pageable) {
+        log.info("Finding all recipes by admin");
+        Pageable sortedByCreatedAt = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        return recipeRepository.findByIsDeleted(false, sortedByCreatedAt);
+    }
+
+    @Override
+    public void blockRecipe(Long id) {
+        log.info("Blocking recipe by id: {}", id);
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe == null) return;
+        recipe.setIsPublic(false);
+        recipeRepository.save(recipe);
+    }
+
+    @Override
+    public List<Recipe> findRecipeCreatedBetweenByAdmin(LocalDateTime createdAtAfterDate, LocalDateTime createdAtBeforeDate) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        return recipeRepository.findByIsDeletedAndIsPublicAndCreatedAtBetween(
+                false,
+                true,
+                createdAtAfterDate,
+                createdAtBeforeDate,
+                sort
+        );
     }
 }

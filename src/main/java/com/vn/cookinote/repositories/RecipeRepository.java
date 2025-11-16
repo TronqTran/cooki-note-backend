@@ -59,4 +59,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findByIsDeletedAndIsPublicAndUserId(Boolean isDeleted, Boolean isPublic, Long userId, Pageable pageable);
 
     List<Recipe> findByIsDeletedAndUserAndCreatedAtBetween(Boolean isDeleted, User user, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore, Sort sort);
+    List<Recipe> findByIsDeletedAndIsPublicAndUserAndCreatedAtBetween(Boolean isDeleted, Boolean isPublic, User user, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore, Sort sort);
+    List<Recipe> findByIsDeletedAndIsPublicAndCreatedAtBetween(Boolean isDeleted, Boolean isPublic, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore, Sort sort);
+
+    Page<Recipe> findByIsDeleted(Boolean isDeleted, Pageable pageable);
 }

@@ -30,4 +30,10 @@ public interface RecipeService {
     Page<Recipe> findRecipesByUserId(Long id, Pageable pageable);
 
     List<Recipe> findRecipeCreatedBetween(Long userId, LocalDateTime createdAtAfter, LocalDateTime createdAtBefore);
+
+    Page<Recipe> findAllRecipesByAdmin(Pageable pageable);
+
+    void blockRecipe(Long id);
+
+    List<Recipe> findRecipeCreatedBetweenByAdmin(LocalDateTime createdAtAfterDate, LocalDateTime createdAtBeforeDate);
 }
