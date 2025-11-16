@@ -1,6 +1,7 @@
 package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.CategoryDto;
+import com.vn.cookinote.dtos.CategoryDto1;
 import com.vn.cookinote.models.Category;
 import com.vn.cookinote.repositories.CategoryRepository;
 import com.vn.cookinote.services.CategoryService;
@@ -31,6 +32,25 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Iterable<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        return categoryRepository.findByIsDeleted(false);
+    }
+
+    @Override
+    public Category updateCategory(CategoryDto categoryDto, Long id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        if (category != null) {
+            category.setName(categoryDto.name());
+            category.setDescription(categoryDto.description());
+            return categoryRepository.save(category);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        categoryRepository.findById(id).ifPresent(category -> {
+            category.setIsDeleted(true);
+            categoryRepository.save(category);
+        });
     }
 }

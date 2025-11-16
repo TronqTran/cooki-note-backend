@@ -7,12 +7,11 @@ import java.io.Serializable;
 import java.util.stream.StreamSupport;
 
 @Builder
-public record CategoryDto(Long id, String name, String description) implements Serializable {
+public record CategoryDto(String name, String description) implements Serializable {
 
     public static CategoryDto fromEntity(Category category) {
         if (category == null) return null;
         return CategoryDto.builder()
-                .id(category.getId())
                 .name(category.getName())
                 .description(category.getDescription())
                 .build();

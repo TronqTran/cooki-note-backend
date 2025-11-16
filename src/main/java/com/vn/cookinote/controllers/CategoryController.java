@@ -22,14 +22,4 @@ public class CategoryController {
         Iterable<CategoryDto> categoryDTOs = CategoryDto.fromEntities(categories);
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy danh sách danh mục thành công", categoryDTOs);
     }
-
-    @PostMapping()
-    public ResponseEntity<ApiResponse<CategoryDto>> createCategory(@RequestBody CategoryDto categoryDto) {
-
-        if (categoryService.existsByName(categoryDto.name()))
-            return ApiResponse.toResponseEntity(ApiStatus.CONFLICT, "Danh mục đã tồn tại");
-
-        Category category = categoryService.createCategory(categoryDto);
-        return ApiResponse.toResponseEntity(ApiStatus.CREATED, "Thêm mới danh mục thành công", CategoryDto.fromEntity(category));
-    }
 }
