@@ -97,8 +97,9 @@ public class UserController {
     public ResponseEntity<ApiResponse<Object>> uploadAvatar(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Jwt jwt) throws IOException {
         Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
         User user = userService.uploadAvatar(file, userid);
+        UserDto1 userDto1 = UserDto1.fromEntity(user);
 
-        return ApiResponse.toResponseEntity(ApiStatus.OK, "Avatar được tải lên thành công");
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Avatar được tải lên thành công", userDto1);
     }
 
     @PatchMapping("/update-profile")

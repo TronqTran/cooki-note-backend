@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with Id: " + userId));
 
         // Upload the new avatar
-        Media media = mediaService.uploadRecipeAvatar(avatar);
+        Media media = mediaService.uploadUserAvatar(avatar);
 
         UserMedia userMedia = UserMedia.builder()
                 .id(new UserMediaKey(user.getId(), media.getId()))
