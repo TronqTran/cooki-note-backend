@@ -21,11 +21,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: p@ssword
-      POSTGRES_DB: cooki-note
+      POSTGRES_DB: cooki_note
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
     restart: always
 
   redis:
