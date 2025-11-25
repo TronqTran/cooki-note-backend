@@ -3,7 +3,7 @@ spring:
     name: cooki-note-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/cooki-note}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/cooki_note}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:p@ssword}
     driver-class-name: org.postgresql.Driver
