@@ -6,7 +6,10 @@ import com.vn.cookinote.models.Category;
 import com.vn.cookinote.repositories.CategoryRepository;
 import com.vn.cookinote.services.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,14 +28,20 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(categoryDto.name())
                 .description(categoryDto.description())
                 .isDeleted(false)
-                .isActive(true)
                 .build();
         return categoryRepository.save(category);
     }
 
     @Override
-    public Iterable<Category> getAllCategories() {
-        return categoryRepository.findByIsDeleted(false);
+    public List<Category> getAllActiveCategories() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        return categoryRepository.findAllByIsDeleted(false, sort);
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        return categoryRepository.findAll(sort);
     }
 
     @Override
@@ -50,6 +59,14 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Long id) {
         categoryRepository.findById(id).ifPresent(category -> {
             category.setIsDeleted(true);
+            categoryRepository.save(category);
+        });
+    }
+
+    @Override
+    public void restoreCategory(Long id) {
+        categoryRepository.findById(id).ifPresent(category -> {
+            category.setIsDeleted(false);
             categoryRepository.save(category);
         });
     }
