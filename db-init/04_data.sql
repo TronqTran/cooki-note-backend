@@ -214,8 +214,8 @@ VALUES (now(), 'Các công thức món ăn Âu-Mỹ, bao gồm món Ý (Pasta, P
 INSERT INTO categories (created_at, description, is_deleted, name, updated_at)
 VALUES (now(), 'Các công thức không sử dụng thịt, cá, gia cầm.', FALSE, 'Ăn Chay', now());
 
-INSERT INTO categories (created_at, description, is_active, is_deleted, name, updated_at)
-VALUES (now(), 'Các công thức làm đồ ăn nhẹ, snack, khai vị, không phải bữa chính.', TRUE, FALSE, 'Món Ăn Vặt', now());
+INSERT INTO categories (created_at, description, is_deleted, name, updated_at)
+VALUES (now(), 'Các công thức làm đồ ăn nhẹ, snack, khai vị, không phải bữa chính.', FALSE, 'Món Ăn Vặt', now());
 
 INSERT INTO categories (created_at, description, is_deleted, name, updated_at)
 VALUES (now(), 'Các công thức làm bánh ngọt, kem, chè và đồ ăn sau bữa ăn chính.', FALSE, 'Món Tráng Miệng', now());
@@ -8728,16 +8728,16 @@ INSERT INTO media (created_at, public_id, type, updated_at, url) VALUES (now(), 
 INSERT INTO recipe_media (created_at, type, updated_at, media_id, recipe_id) VALUES (now(), 'AVATAR', now(), 100, 81);
 
 INSERT INTO ingredients (created_at, name, updated_at)
-VALUES (now(), 'Tương ớt đậu Doubanjiang (Tứ Xuyên)', now());
+VALUES (now(), 'Tương ớt đậu', now());
 
 INSERT INTO ingredients (created_at, name, updated_at)
-VALUES (now(), 'Rượu Thiệu Hưng (Shaoxing Wine)', now());
+VALUES (now(), 'Rượu', now());
 
 INSERT INTO ingredients (created_at, name, updated_at)
-VALUES (now(), 'Hạt Tiêu Tứ Xuyên (Sichuan Peppercorns)', now());
+VALUES (now(), 'Hạt Tiêu', now());
 
 INSERT INTO ingredients (created_at, name, updated_at)
-VALUES (now(), 'Dầu Ớt Tứ Xuyên (Sichuan Chili Oil)', now());
+VALUES (now(), 'Dầu Ớt', now());
 
 INSERT INTO recipe_ingredients (created_at, note, quantity, required, unit, updated_at, ingredient_id, recipe_id)
 VALUES (now(), 'Đậu phụ non (soft/silken tofu), cắt khối vuông 2cm.', 300, TRUE, 'gram', now(), 31, 81);
