@@ -107,6 +107,13 @@ public class AdminController {
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, "Thêm mới danh mục thành công", CategoryDto1.fromEntity(category));
     }
 
+    @GetMapping("/category")
+    public ResponseEntity<ApiResponse<Iterable<CategoryDto1>>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        List<CategoryDto1> categoryDTOs = CategoryDto1.fromEntities(categories);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy danh sách danh mục thành công", categoryDTOs);
+    }
+
     @PatchMapping("/category/{id}")
     public ResponseEntity<ApiResponse<CategoryDto1>> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
         if (categoryService.existsByName(categoryDto.name()))
@@ -120,6 +127,12 @@ public class AdminController {
     public ResponseEntity<ApiResponse<Object>> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Xóa danh mục thành công");
+    }
+
+    @PatchMapping("/category/{id}/restore")
+    public ResponseEntity<ApiResponse<Object>> restoreCategory(@PathVariable Long id) {
+        categoryService.restoreCategory(id);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Khôi phục danh mục thành công");
     }
 
     @GetMapping("/recipe")
@@ -145,6 +158,15 @@ public class AdminController {
         return ApiResponse.toResponseEntity(
                 ApiStatus.OK,
                 "Khóa công thức thành công"
+        );
+    }
+
+    @PatchMapping("/recipe/{id}/unblock")
+    public ResponseEntity<ApiResponse<Object>> activateRecipe(@PathVariable Long id) {
+        recipeService.unblockRecipe(id);
+        return ApiResponse.toResponseEntity(
+                ApiStatus.OK,
+                "Mở khóa công thức thành công"
         );
     }
 
