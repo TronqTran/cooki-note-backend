@@ -1,5 +1,6 @@
 package com.vn.cookinote.services.impl;
 
+import com.vn.cookinote.dtos.NotificationDto;
 import com.vn.cookinote.enums.NotificationType;
 import com.vn.cookinote.models.Notification;
 import com.vn.cookinote.models.Recipe;
@@ -13,6 +14,7 @@ import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.services.RecipeLikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -27,6 +29,7 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
     private final UserRepository userRepository;
     private final RecipeLikeRepository recipeLikeRepository;
     private final NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public RecipeLike likeRecipe(Long recipeId, Long userId) {
@@ -52,6 +55,20 @@ public class RecipeLikeServiceImpl implements RecipeLikeService {
                         .build();
 
                 notificationRepository.save(notification);
+
+                // Bắn thông báo realtime tới người bị follow
+                NotificationDto notificationDto = NotificationDto.builder()
+                        .id(notification.getId())
+                        .type(notification.getType())
+                        .message(notification.getMessage())
+                        .targetId(notification.getTargetId())
+                        .isRead(notification.getIsRead())
+                        .createdAt(notification.getCreatedAt())
+                        .build();
+                // gửi tới đích riêng của user (user destination)
+                User target = recipe.get().getUser();
+                simpMessagingTemplate.convertAndSendToUser(
+                        target.getEmail(), "/queue/notifications", notificationDto);
             }
         }
         else {

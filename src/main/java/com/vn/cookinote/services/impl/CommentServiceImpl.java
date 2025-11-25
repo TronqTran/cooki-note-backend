@@ -1,6 +1,7 @@
 package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.CommentDto;
+import com.vn.cookinote.dtos.NotificationDto;
 import com.vn.cookinote.models.Comment;
 import com.vn.cookinote.models.Notification;
 import com.vn.cookinote.models.Recipe;
@@ -11,6 +12,7 @@ import com.vn.cookinote.repositories.RecipeRepository;
 import com.vn.cookinote.repositories.UserRepository;
 import com.vn.cookinote.services.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
 
     @Override
@@ -52,6 +55,20 @@ public class CommentServiceImpl implements CommentService {
                         .build();
 
                 notificationRepository.save(notification);
+
+                // Bắn thông báo realtime tới người bị follow
+                NotificationDto notificationDto = NotificationDto.builder()
+                        .id(notification.getId())
+                        .type(notification.getType())
+                        .message(notification.getMessage())
+                        .targetId(notification.getTargetId())
+                        .isRead(notification.getIsRead())
+                        .createdAt(notification.getCreatedAt())
+                        .build();
+                // gửi tới đích riêng của user (user destination)
+                User target = recipe.get().getUser();
+                simpMessagingTemplate.convertAndSendToUser(
+                        target.getEmail(), "/queue/notifications", notificationDto);
             }
 
             return commentRepository.save(comment);
