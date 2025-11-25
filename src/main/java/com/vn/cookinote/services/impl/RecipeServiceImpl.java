@@ -387,4 +387,13 @@ public class RecipeServiceImpl implements RecipeService {
                 sort
         );
     }
+
+    @Override
+    public void unblockRecipe(Long id) {
+        log.info("Unblocking recipe by id: {}", id);
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe == null) return;
+        recipe.setIsPublic(true);
+        recipeRepository.save(recipe);
+    }
 }

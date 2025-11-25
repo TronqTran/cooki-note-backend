@@ -36,4 +36,6 @@ public interface RecipeService {
     void blockRecipe(Long id);
 
     List<Recipe> findRecipeCreatedBetweenByAdmin(LocalDateTime createdAtAfterDate, LocalDateTime createdAtBeforeDate);
+
+    void unblockRecipe(Long id);
 }

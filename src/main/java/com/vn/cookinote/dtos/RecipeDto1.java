@@ -9,7 +9,7 @@ import java.util.List;
 
 @Builder
 public record RecipeDto1(Long id, String title, String description, Integer cookTimeMinutes, Integer servings,
-                         Difficulty difficulty, UserDto1 user, List<RecipeMediaDto> medias) implements Serializable {
+                         Difficulty difficulty, UserDto1 user, List<RecipeMediaDto> medias, boolean isPublic) implements Serializable {
 
     public static RecipeDto1 fromEntity(Recipe recipe) {
         if (recipe == null) return null;
@@ -22,6 +22,7 @@ public record RecipeDto1(Long id, String title, String description, Integer cook
                 .difficulty(recipe.getDifficulty())
                 .user(UserDto1.fromEntity(recipe.getUser()))
                 .medias(RecipeMediaDto.fromEntities(recipe.getMedias()))
+                .isPublic(recipe.getIsPublic())
                 .build();
     }
 
