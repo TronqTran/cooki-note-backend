@@ -70,4 +70,9 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.save(category);
         });
     }
+
+    @Override
+    public List<Category> searchCategoriesByName(String keyword) {
+        return categoryRepository.findByNameLike(keyword);
+    }
 }
