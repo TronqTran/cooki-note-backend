@@ -43,3 +43,25 @@ CREATE TRIGGER ingredient_tsv_trigger
     ON ingredients
     FOR EACH ROW
 EXECUTE PROCEDURE ingredient_tsv_trigger_func();
+
+-- category table full-text search setup
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS search_vector tsvector;
+
+CREATE INDEX IF NOT EXISTS idx_categories_search_vector
+    ON categories USING GIN(search_vector);
+
+CREATE OR REPLACE FUNCTION category_tsv_trigger_func()
+    RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.search_vector :=
+            setweight(to_tsvector('simple', coalesce(unaccent(NEW.name), '')), 'A');
+    RETURN NEW;
+END
+$$;
+
+DROP TRIGGER IF EXISTS category_tsv_trigger ON categories;
+CREATE TRIGGER category_tsv_trigger
+    BEFORE INSERT OR UPDATE OF name
+    ON categories
+    FOR EACH ROW
+EXECUTE PROCEDURE category_tsv_trigger_func();
