@@ -49,7 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUsernameExist(String username) {
-        return userRepository.existsByUsername(username);
+        User user = userRepository.existsByUsername(username);
+        return user != null;
     }
 
     @Override
@@ -162,7 +163,7 @@ public class UserServiceImpl implements UserService {
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
-        return userRepository.findAll(pageable);
+        return userRepository.findAllByStatusOrStatus(Status.ACTIVE, Status.BANNED, sortedByCreatedAt);
     }
 
     @Override

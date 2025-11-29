@@ -1,5 +1,6 @@
 package com.vn.cookinote.repositories;
 
+import com.vn.cookinote.enums.Status;
 import com.vn.cookinote.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    Boolean existsByUsername(String username);
+    @Query(value = """
+    SELECT * FROM users WHERE username = unaccent(:username)
+    """, nativeQuery = true)
+    User existsByUsername(String username);
 
     @Query(value = """
         SELECT u FROM User u
@@ -27,8 +31,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
         SELECT u FROM User u
-        WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%')) 
+        WHERE (u.status = 'ACTIVE' OR u.status = 'BANNED')
+        AND LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))
         """)
     Iterable<User> findByUsername(@Param("username") String username);
 
+
+    Page<User> findAllByStatusOrStatus(Status status, Status status1, Pageable pageable);
 }
