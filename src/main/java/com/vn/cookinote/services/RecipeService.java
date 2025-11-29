@@ -38,4 +38,6 @@ public interface RecipeService {
     List<Recipe> findRecipeCreatedBetweenByAdmin(LocalDateTime createdAtAfterDate, LocalDateTime createdAtBeforeDate);
 
     void unblockRecipe(Long id);
+
+    List<Recipe> fullTextSearchAdmin(String keyword, Pageable unpaged);
 }

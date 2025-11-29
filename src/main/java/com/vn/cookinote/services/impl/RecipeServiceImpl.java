@@ -229,19 +229,29 @@ public class RecipeServiceImpl implements RecipeService {
         // Update medias
         if (recipeDto.medias() != null) {
             List<RecipeMedia> recipeMedias = recipeDto.medias().stream()
-                .map(recipeMediaDto -> mediaRepository.findById(recipeMediaDto.media().id())
-                    .map(media -> RecipeMedia.builder()
-                            .id(new RecipeMediaKey(recipe.getId(), media.getId()))
-                            .media(media)
-                            .recipe(recipe)
-                            .type(ProfileMediaType.AVATAR)
-                            .build())
-                    .orElse(null))
-                .filter(java.util.Objects::nonNull)
-                .toList();
-            recipe.setMedias(recipeMedias);
+                    .map(recipeMediaDto -> mediaRepository.findById(recipeMediaDto.media().id())
+                            .map(media -> RecipeMedia.builder()
+                                    .id(new RecipeMediaKey(recipe.getId(), media.getId()))
+                                    .media(media)
+                                    .recipe(recipe)
+                                    .type(ProfileMediaType.AVATAR)
+                                    .build())
+                            .orElse(null))
+                    .filter(java.util.Objects::nonNull)
+                    .toList();
+
+            if (recipe.getMedias() == null) {
+                recipe.setMedias(new ArrayList<>(recipeMedias));
+            } else {
+                recipe.getMedias().clear();
+                recipe.getMedias().addAll(recipeMedias);
+            }
         } else {
-            recipe.setMedias(new ArrayList<>());
+            if (recipe.getMedias() != null) {
+                recipe.getMedias().clear();
+            } else {
+                recipe.setMedias(new ArrayList<>());
+            }
         }
 
         // Update steps
@@ -269,36 +279,54 @@ public class RecipeServiceImpl implements RecipeService {
                 }
                 steps.add(step);
             }
-            recipe.setSteps(steps);
+            if (recipe.getSteps() == null) {
+                recipe.setSteps(new ArrayList<>(steps));
+            } else {
+                recipe.getSteps().clear();
+                recipe.getSteps().addAll(steps);
+            }
         } else {
-            recipe.setSteps(new ArrayList<>());
+            if (recipe.getSteps() != null) {
+                recipe.getSteps().clear();
+            } else {
+                recipe.setSteps(new ArrayList<>());
+            }
         }
 
-        // Update ingredients
         if (recipeDto.ingredients() != null) {
             List<RecipeIngredient> recipeIngredients = recipeDto.ingredients().stream()
-                .map(ingredientDto -> {
-                    Ingredient ingredient = ingredientRepository.findByName(ingredientDto.ingredient().name())
-                            .orElseGet(() -> {
-                                Ingredient newIngredient = new Ingredient();
-                                newIngredient.setName(ingredientDto.ingredient().name());
-                                return ingredientRepository.save(newIngredient);
-                            });
+                    .map(ingredientDto -> {
+                        Ingredient ingredient = ingredientRepository.findByName(ingredientDto.ingredient().name())
+                                .orElseGet(() -> {
+                                    Ingredient newIngredient = new Ingredient();
+                                    newIngredient.setName(ingredientDto.ingredient().name());
+                                    return ingredientRepository.save(newIngredient);
+                                });
 
-                    return RecipeIngredient.builder()
-                            .id(new RecipeIngredientKey(recipe.getId(), ingredient.getId()))
-                            .recipe(recipe)
-                            .ingredient(ingredient)
-                            .quantity(ingredientDto.quantity())
-                            .unit(ingredientDto.unit())
-                            .required(ingredientDto.required())
-                            .note(ingredientDto.note())
-                            .build();
-                })
-                .toList();
-            recipe.setIngredients(recipeIngredients);
+                        return RecipeIngredient.builder()
+                                .id(new RecipeIngredientKey(recipe.getId(), ingredient.getId()))
+                                .recipe(recipe)
+                                .ingredient(ingredient)
+                                .quantity(ingredientDto.quantity())
+                                .unit(ingredientDto.unit())
+                                .required(ingredientDto.required())
+                                .note(ingredientDto.note())
+                                .build();
+                    })
+                    .toList();
+
+            if (recipe.getIngredients() == null) {
+                recipe.setIngredients(new ArrayList<>(recipeIngredients));
+            } else {
+                recipe.getIngredients().clear();
+                recipe.getIngredients().addAll(recipeIngredients);
+            }
         } else {
-            recipe.setIngredients(new ArrayList<>());
+            if (recipe.getIngredients() != null) {
+                recipe.getIngredients().clear();
+            } else {
+                recipe.setIngredients(new ArrayList<>());
+            }
         }
 
         return recipeRepository.save(recipe);
@@ -395,5 +423,11 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipe == null) return;
         recipe.setIsPublic(true);
         recipeRepository.save(recipe);
+    }
+
+    @Override
+    public List<Recipe> fullTextSearchAdmin(String keyword, Pageable unpaged) {
+        log.info("Searching recipes by keyword: {}", keyword);
+        return recipeRepository.fullTextSearchAdmin(keyword, unpaged).getContent();
     }
 }
