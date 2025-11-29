@@ -114,6 +114,13 @@ public class AdminController {
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Lấy danh sách danh mục thành công", categoryDTOs);
     }
 
+    @GetMapping("/category/search")
+    public ResponseEntity<ApiResponse<Iterable<CategoryDto1>>> searchCategory(@RequestParam String keyword) {
+        List<Category> categories = categoryService.searchCategoriesByName(keyword);
+        List<CategoryDto1> categoryDTOs = CategoryDto1.fromEntities(categories);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Tìm kiếm danh mục thành công", categoryDTOs);
+    }
+
     @PatchMapping("/category/{id}")
     public ResponseEntity<ApiResponse<CategoryDto1>> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
         if (categoryService.existsByName(categoryDto.name()))
@@ -149,6 +156,18 @@ public class AdminController {
                 ApiStatus.OK,
                 "Lấy danh sách công thức thành công",
                 RecipeDto1.fromEntities(recipeList)
+        );
+    }
+
+    @GetMapping("/recipe/search")
+    public ResponseEntity<ApiResponse<Object>> searchRecipeAll(@RequestParam String keyword) {
+
+        List<Recipe> recipes = recipeService.fullTextSearchAdmin(keyword, Pageable.unpaged());
+
+        return ApiResponse.toResponseEntity(
+                ApiStatus.OK,
+                "Tìm kiếm công thức thành công",
+                RecipeDto1.fromEntities(recipes)
         );
     }
 
