@@ -58,6 +58,12 @@ public class UserController {
                     "Mật khẩu hiện tại không đúng hoặc mật khẩu mới không khớp");
         }
 
+        //
+        if (request.newPassword().equals(request.currentPassword())) {
+            return ApiResponse.toResponseEntity(ApiStatus.BAD_REQUEST,
+                    "Mật khẩu mới không được trùng với mật khẩu hiện tại");
+        }
+
         user = userService.changePassword(request, connectedUser);
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, "Đổi mật khẩu thành công");

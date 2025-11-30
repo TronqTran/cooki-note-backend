@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +31,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.Duration;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +45,20 @@ public class UserServiceImpl implements UserService {
     private final OtpService otpService;
     private final UserMediaRepository userMediaRepository;
     private final MediaService mediaService;
+    private final StringRedisTemplate redisTemplate;
 
+    private static final String FAIL_KEY_PREFIX = "login:fail:";
+    private static final String LOCK_KEY_PREFIX = "login:lock:";
+    private static final long FAIL_THRESHOLD = 3;
+    private static final Duration LOCK_DURATION = Duration.ofMinutes(10);
+
+    private String failKey(String email) {
+        return FAIL_KEY_PREFIX + email.toLowerCase(Locale.ROOT);
+    }
+
+    private String lockKey(String email) {
+        return LOCK_KEY_PREFIX + email.toLowerCase(Locale.ROOT);
+    }
     @Override
     public boolean isEmailExist(String email) {
         return userRepository.existsByEmail(email);
@@ -187,5 +204,39 @@ public class UserServiceImpl implements UserService {
         user.setStatus(Status.BANNED);
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public boolean isLoginLocked(String email) {
+        if (email == null) return false;
+        return redisTemplate.hasKey(lockKey(email));
+    }
+
+    @Override
+    public void recordFailedLogin(String email) {
+        if (email == null) return;
+        String lk = lockKey(email);
+        // if already locked, nothing to do
+        if (redisTemplate.hasKey(lk)) return;
+
+        String fk = failKey(email);
+        Long count = redisTemplate.opsForValue().increment(fk);
+        if (count != null && count == 1) {
+            // set expire for the fail counter so it resets after the same window as lock duration
+            redisTemplate.expire(fk, LOCK_DURATION.getSeconds(), TimeUnit.SECONDS);
+        }
+
+        if (count != null && count >= FAIL_THRESHOLD) {
+            // create a lock key with TTL and remove the fail counter
+            redisTemplate.opsForValue().set(lk, "1", LOCK_DURATION.getSeconds(), TimeUnit.SECONDS);
+            redisTemplate.delete(fk);
+        }
+    }
+
+    @Override
+    public void resetFailedLogin(String email) {
+        if (email == null) return;
+        redisTemplate.delete(failKey(email));
+        redisTemplate.delete(lockKey(email));
     }
 }

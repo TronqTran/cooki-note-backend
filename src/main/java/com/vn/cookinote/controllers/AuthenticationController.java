@@ -57,8 +57,15 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<ApiResponse<Object>> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
 
-        // Check if the user is deactivated
-        Optional<User> user = userService.findByEmail(authenticationRequest.email());
+        String email = authenticationRequest.email();
+
+        // Check Redis lock first
+        if (userService.isLoginLocked(email)) {
+            return ApiResponse.toResponseEntity(ApiStatus.FORBIDDEN, "Tài khoản tạm khóa do đăng nhập sai nhiều lần. Vui lòng thử lại sau 10 phút");
+        }
+
+        // Check if the user is deactivated in DB
+        Optional<User> user = userService.findByEmail(email);
         if (user.isPresent() && user.get().getStatus() != Status.ACTIVE) {
             return ApiResponse.toResponseEntity(ApiStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa");
         }
@@ -72,8 +79,13 @@ public class AuthenticationController {
                     )
             );
         } catch (Exception e) {
+            // record failure in Redis and return unauthorized
+            userService.recordFailedLogin(email);
             return ApiResponse.toResponseEntity(ApiStatus.UNAUTHORIZED, "Đăng nhập thất bại: Email hoặc mật khẩu không đúng");
         }
+
+        // successful login -> reset fail counter / lock
+        userService.resetFailedLogin(email);
 
         String token = authenticationService.authenticate(authenticationRequest);
         Map<String, String> tokenMap = new HashMap<>();

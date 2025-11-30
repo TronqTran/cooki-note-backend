@@ -42,4 +42,10 @@ public interface UserService {
     User activateUser(Long userId);
 
     User banUser(Long userId);
+
+    boolean isLoginLocked(String email);
+
+    void recordFailedLogin(String email);
+
+    void resetFailedLogin(String email);
 }
