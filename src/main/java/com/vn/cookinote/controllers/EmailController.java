@@ -28,8 +28,11 @@ public class EmailController {
             return ApiResponse.toResponseEntity(ApiStatus.NOT_FOUND, "Email không tồn tại trong hệ thống");
         }
 
-        // Generate OTP code
+        // Generate OTP code (may return null if daily limit reached)
         String code = otpService.generateOtp(email);
+        if (code == null) {
+            return ApiResponse.toResponseEntity(ApiStatus.BAD_REQUEST, "Bạn đã yêu cầu mã OTP quá 5 lần trong ngày");
+        }
         // Send OTP code to the user's email'
         emailService.sendOtpEmail(email, code);
 
