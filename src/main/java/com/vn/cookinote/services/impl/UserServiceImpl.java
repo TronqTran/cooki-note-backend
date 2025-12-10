@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email)));
+                .orElseThrow(() -> new UsernameNotFoundException("Email không tồn tại: " + email)));
     }
 
     @Override
