@@ -42,7 +42,7 @@ public class RecipeIngredient {
     @Column(name = "quantity", nullable = false, precision = 10, scale = 2)
     private BigDecimal quantity;
 
-    @Column(name = "unit", length = 50)
+    @Column(name = "unit", length = 50, nullable = false)
     private String unit;
 
     @Column(name = "required", nullable = false)

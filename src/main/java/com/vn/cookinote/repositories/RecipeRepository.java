@@ -33,13 +33,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query(value = """
     SELECT r.*,
-           MAX(ts_rank_cd(r.search_vector, plainto_tsquery('simple', vn_unaccent(:keyword))) +
-               ts_rank_cd(i.search_vector, plainto_tsquery('simple', vn_unaccent(:keyword)))) AS rank
+           MAX(ts_rank_cd(r.search_vector, plainto_tsquery('simple', unaccent(:keyword))) +
+               ts_rank_cd(i.search_vector, plainto_tsquery('simple', unaccent(:keyword)))) AS rank
     FROM recipes r
              JOIN recipe_ingredients ri ON r.recipe_id = ri.recipe_id
              JOIN ingredients i ON ri.ingredient_id = i.ingredient_id
-    WHERE (r.search_vector @@ plainto_tsquery('simple', vn_unaccent(:keyword))
-        OR i.search_vector @@ plainto_tsquery('simple', vn_unaccent(:keyword)))
+    WHERE (r.search_vector @@ plainto_tsquery('simple', unaccent(:keyword))
+        OR i.search_vector @@ plainto_tsquery('simple', unaccent(:keyword)))
         AND r.is_deleted = false
         AND r.is_public = true
     GROUP BY r.recipe_id
@@ -50,13 +50,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query(value = """
     SELECT r.*,
-           MAX(ts_rank_cd(r.search_vector, plainto_tsquery('simple', vn_unaccent(:keyword))) +
-               ts_rank_cd(i.search_vector, plainto_tsquery('simple', vn_unaccent(:keyword)))) AS rank
+           MAX(ts_rank_cd(r.search_vector, plainto_tsquery('simple', unaccent(:keyword))) +
+               ts_rank_cd(i.search_vector, plainto_tsquery('simple', unaccent(:keyword)))) AS rank
     FROM recipes r
              JOIN recipe_ingredients ri ON r.recipe_id = ri.recipe_id
              JOIN ingredients i ON ri.ingredient_id = i.ingredient_id
-    WHERE (r.search_vector @@ plainto_tsquery('simple', vn_unaccent(:keyword))
-        OR i.search_vector @@ plainto_tsquery('simple', vn_unaccent(:keyword)))
+    WHERE (r.search_vector @@ plainto_tsquery('simple', unaccent(:keyword))
+        OR i.search_vector @@ plainto_tsquery('simple', unaccent(:keyword)))
         AND r.is_deleted = false
     GROUP BY r.recipe_id
     ORDER BY rank DESC;
