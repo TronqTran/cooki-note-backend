@@ -1,6 +1,7 @@
 package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.RecipeDto;
+import com.vn.cookinote.dtos.RecipeDto5;
 import com.vn.cookinote.dtos.StepDto;
 import com.vn.cookinote.enums.ProfileMediaType;
 import com.vn.cookinote.models.*;
@@ -8,6 +9,7 @@ import com.vn.cookinote.models.keys.RecipeIngredientKey;
 import com.vn.cookinote.models.keys.RecipeMediaKey;
 import com.vn.cookinote.models.keys.StepMediaKey;
 import com.vn.cookinote.repositories.*;
+import com.vn.cookinote.services.AIService;
 import com.vn.cookinote.services.RecipeService;
 import com.vn.cookinote.services.ViewHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeLikeRepository recipeLikeRepository;
     private final StringRedisTemplate stringRedisTemplate;
     private final ViewHistoryService viewHistoryService;
+    private final AIService aIService;
 
     @Override
     public Recipe createRecipe(RecipeDto recipeDto, Long userId) {
@@ -429,5 +432,10 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Recipe> fullTextSearchAdmin(String keyword, Pageable unpaged) {
         log.info("Searching recipes by keyword: {}", keyword);
         return recipeRepository.fullTextSearchAdmin(keyword, unpaged).getContent();
+    }
+
+    @Override
+    public RecipeDto5 generateRecipe(String message) {
+        return aIService.generateRecipe(message);
     }
 }

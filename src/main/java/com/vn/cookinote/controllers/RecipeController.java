@@ -1,9 +1,6 @@
 package com.vn.cookinote.controllers;
 
-import com.vn.cookinote.dtos.RecipeDto;
-import com.vn.cookinote.dtos.RecipeDto1;
-import com.vn.cookinote.dtos.RecipeDto2;
-import com.vn.cookinote.dtos.RecipeDto3;
+import com.vn.cookinote.dtos.*;
 import com.vn.cookinote.dtos.responses.ApiResponse;
 import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.models.Recipe;
@@ -158,5 +155,11 @@ public class RecipeController {
         stats.put("recipes", RecipeDto3.fromEntities(recipes));
 
         return ApiResponse.toResponseEntity(ApiStatus.OK, ApiStatus.OK.getMessage(), stats);
+    }
+
+    @PostMapping("/generate")
+    public ResponseEntity<ApiResponse<Object>> generateRecipe(@RequestBody String message) {
+        RecipeDto5 generatedRecipe = recipeService.generateRecipe(message);
+        return ApiResponse.toResponseEntity(ApiStatus.OK, "Công thức đã được tạo thành công", generatedRecipe);
     }
 }

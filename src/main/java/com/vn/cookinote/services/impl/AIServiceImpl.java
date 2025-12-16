@@ -1,7 +1,9 @@
 package com.vn.cookinote.services.impl;
 
 import com.vn.cookinote.dtos.MealPlanDto;
+import com.vn.cookinote.dtos.RecipeDto;
 import com.vn.cookinote.dtos.RecipeDto4;
+import com.vn.cookinote.dtos.RecipeDto5;
 import com.vn.cookinote.models.Recipe;
 import com.vn.cookinote.repositories.RecipeRepository;
 import com.vn.cookinote.services.AIService;
@@ -73,5 +75,45 @@ public class AIServiceImpl implements AIService {
 
         return chatClient.prompt(prompt).call().entity(new ParameterizedTypeReference<List<MealPlanDto>>() {
         });
+    }
+
+    @Override
+    public RecipeDto5 generateRecipe(String message) {
+        SystemMessage systemMessage = new SystemMessage("""
+        You are an AI specialized in generating cooking recipe data.
+        
+        Your task:
+        - Analyze the user's request
+        - Generate ONE valid cooking recipe
+        
+        MANDATORY RULES:
+        1. Return ONLY valid JSON
+        2. The JSON must EXACTLY match the structure of RecipeDto5
+        3. Do NOT include explanations, markdown, or extra text
+        4. Do NOT add fields outside the defined structure
+        5. Do NOT return null values
+        
+        DIFFICULTY ENUM RULES:
+        - EASY: Simple steps, minimal techniques, suitable for beginners
+        - MEDIUM: Requires basic cooking skills and time management
+        - HARD: Multiple steps, requires cooking experience
+        - VERY_HARD: Complex techniques, requires advanced skills
+        
+        DATA REQUIREMENTS:
+        - title: short, accurate dish name
+        - description: 1–2 concise sentences
+        - cookTimeMinutes: reasonable total cooking time
+        - servings: integer greater than 0
+        - difficulty: ONLY one of EASY | MEDIUM | HARD | VERY_HARD
+        - steps: at least one step, stepOrder must be incremental
+        - ingredients: no duplicate ingredient names
+        
+        LANGUAGE:
+        - All text must be written in Vietnamese
+        """);
+
+        UserMessage userMessage = new UserMessage(message);
+        Prompt prompt = new Prompt(systemMessage, userMessage);
+        return chatClient.prompt(prompt).call().entity(RecipeDto5.class);
     }
 }

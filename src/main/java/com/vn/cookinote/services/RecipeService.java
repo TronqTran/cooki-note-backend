@@ -1,6 +1,7 @@
 package com.vn.cookinote.services;
 
 import com.vn.cookinote.dtos.RecipeDto;
+import com.vn.cookinote.dtos.RecipeDto5;
 import com.vn.cookinote.models.Recipe;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,4 +41,6 @@ public interface RecipeService {
     void unblockRecipe(Long id);
 
     List<Recipe> fullTextSearchAdmin(String keyword, Pageable unpaged);
+
+    RecipeDto5 generateRecipe(String message);
 }

@@ -22,4 +22,9 @@ public class AIController {
         // Placeholder for AI chat functionality
         return aIService.generateMealPlan(message);
     }
+
+    @PostMapping("/recipe")
+    public Object generateRecipe(@RequestBody String message) {
+        return aIService.generateRecipe(message);
+    }
 }
