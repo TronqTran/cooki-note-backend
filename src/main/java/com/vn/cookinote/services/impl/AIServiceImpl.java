@@ -116,4 +116,56 @@ public class AIServiceImpl implements AIService {
         Prompt prompt = new Prompt(systemMessage, userMessage);
         return chatClient.prompt(prompt).call().entity(RecipeDto5.class);
     }
+
+    @Override
+    public String generateRecipeFromContent(String content) {
+        String systemInstruction = """
+            You are a professional chef assistant.
+            Your task is to analyze the unstructured food/recipe text provided by the user and convert it into a structured JSON object.
+            
+            The JSON object must strictly follow this structure:
+            {
+                "title": "Name of the dish (generate a catchy one if missing)",
+                "description": "Short, appetizing description",
+                "cookTimeMinutes": Integer (estimate if missing, e.g., 30),
+                "servings": Integer (estimate if missing, e.g., 2),
+                "difficulty": "One of [EASY, MEDIUM, HARD] (estimate based on complexity)",
+                "ingredients": [
+                    { 
+                        "name": "Ingredient name", 
+                        "quantity": "Numeric value as string (e.g. '500', '1/2')", 
+                        "unit": "Unit (e.g. 'g', 'kg', 'tsp', 'tbsp')", 
+                        "note": "Preparation note (e.g. 'chopped', 'sliced') or empty string",
+                        "required": true
+                    }
+                ],
+                "steps": [
+                    { "stepOrder": 1, "description": "Description of step 1" },
+                    { "stepOrder": 2, "description": "Description of step 2" }
+                ]
+            }
+
+            IMPORTANT RULES:
+            1. Return ONLY the raw JSON string. Do not include markdown formatting (like ```json ... ```).
+            2. If the input is not related to food, return a JSON with empty fields but do not throw error.
+            3. If the input contains MULTIPLE recipes, ONLY extract the FIRST recipe found in the text. Ignore the rest.
+            4. Ingredients: no duplicate ingredient names
+            5. Translate content to Vietnamese if the input is in Vietnamese.
+        """;
+        UserMessage userMessage = new UserMessage(content);
+        Prompt prompt = new Prompt(new SystemMessage(systemInstruction), userMessage);
+        String response = chatClient.prompt(prompt).call().content();
+
+        // Làm sạch chuỗi JSON nếu AI lỡ trả về markdown block
+        if (response.startsWith("```json")) {
+            response = response.substring(7);
+        }
+        if (response.startsWith("```")) {
+            response = response.substring(3);
+        }
+        if (response.endsWith("```")) {
+            response = response.substring(0, response.length() - 3);
+        }
+        return response.trim();
+    }
 }

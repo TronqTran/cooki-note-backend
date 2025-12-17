@@ -13,6 +13,7 @@ import com.vn.cookinote.services.OtpService;
 import com.vn.cookinote.services.TokenBlacklistService;
 import com.vn.cookinote.services.UserService;
 import com.vn.cookinote.utils.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +45,7 @@ public class UserController {
 
     @PatchMapping("/change-password")
     public ResponseEntity<ApiResponse<Object>> changePassword(
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             Principal connectedUser) {
 
         //Get the authenticated user
@@ -109,7 +110,7 @@ public class UserController {
     }
 
     @PatchMapping("/update-profile")
-    public ResponseEntity<ApiResponse<Object>> updateProfile(@RequestBody UpdateProfileRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<ApiResponse<Object>> updateProfile(@Valid @RequestBody UpdateProfileRequest request, @AuthenticationPrincipal Jwt jwt) {
         Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
         User user = userService.updateProfile(request, userid);
         // Prepare the user information to return

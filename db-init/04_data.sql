@@ -1,6 +1,6 @@
 -- User ID: 1 (Admin)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1980-01-01', now(), now(), 'MALE', 'ADMIN', 'ACTIVE', 'Admin', 'User', 'LOCAL', 'admin', 'cookinote.contact@gmail.com', null, 'Admin', '$2a$10$fJrOllura2iwFEd6TDd0BOybSRaYrhcLCNaqrE7xMoCUP/WStN3yy');
+VALUES ('1980-01-01', now(), now(), 'MALE', 'ADMIN', 'ACTIVE', 'Admin', 'User', 'LOCAL', 'admin', 'cookinote.contact@gmail.com', null, 'Admin', '$2a$10$r6fdfyaga.xMw0JYvCXsaO/vNY2IJu75zD2SSRvWM2uCxQz8CFz1a');
 
 INSERT INTO media (created_at, updated_at, type, url, public_id)
 VALUES (now(), now(), 'IMAGE', 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763875391/profile-avatar/o1op3i39xxzg5gzwqabb.jpg','profile-avatar/o1op3i39xxzg5gzwqabb');
@@ -10,7 +10,7 @@ VALUES (now(), 1, now(), 1, 'AVATAR');
 
 -- User ID: 2 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1995-03-15', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Thanh', 'Mai', 'LOCAL', 'thanhmai_foodie', 'thanhmai.foodie@gmail.com', null, 'Yêu thích các món ăn truyền thống Việt Nam.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1995-03-15', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Thanh', 'Mai', 'LOCAL', 'thanhmai_foodie', 'thanhmai.foodie@gmail.com', null, 'Yêu thích các món ăn truyền thống Việt Nam.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/ytlrd8xerdj2ra0awutm', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877058/profile-avatar/ytlrd8xerdj2ra0awutm.jpg');
@@ -19,7 +19,7 @@ INSERT INTO user_media (created_at, media_id, updated_at, user_id, type)
 VALUES (now(), 2, now(), 2, 'AVATAR');
 -- User ID: 3 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1998-07-28', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Minh', 'Nguyệt', 'LOCAL', 'minh_nguyet_bake', 'minhnguyet.bake@outlook.com', null, 'Đam mê làm bánh ngọt và tráng miệng.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1998-07-28', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Minh', 'Nguyệt', 'LOCAL', 'minh_nguyet_bake', 'minhnguyet.bake@outlook.com', null, 'Đam mê làm bánh ngọt và tráng miệng.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/iwdhts337sekkcg34loq', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877271/profile-avatar/iwdhts337sekkcg34loq.jpg');
@@ -29,7 +29,7 @@ VALUES (now(), 3, now(), 3, 'AVATAR');
 
 -- User ID: 4 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1992-11-05', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Hương', 'Lan', 'LOCAL', 'huonglan_eatclean', 'huonglan.clean@yahoo.com', null, 'Chia sẻ công thức ăn uống lành mạnh, Eat Clean.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1992-11-05', now(), now(), 'FEMALE', 'USER', 'ACTIVE', 'Hương', 'Lan', 'LOCAL', 'huonglan_eatclean', 'huonglan.clean@yahoo.com', null, 'Chia sẻ công thức ăn uống lành mạnh, Eat Clean.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/qajqnhfoblwrls1btw7d', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877360/profile-avatar/qajqnhfoblwrls1btw7d.jpg');
@@ -39,7 +39,7 @@ VALUES (now(), 4, now(), 4, 'AVATAR');
 
 -- User ID: 5 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('2000-01-01', '2025-01-20 10:15:00', '2025-01-20 10:15:00', 'FEMALE', 'USER', 'ACTIVE', 'Cẩm', 'Tú', 'LOCAL', 'camtu.naugi', 'camtunaugi@icloud.com', null, 'Nấu ăn cho gia đình là niềm vui mỗi ngày.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('2000-01-01', '2025-01-20 10:15:00', '2025-01-20 10:15:00', 'FEMALE', 'USER', 'ACTIVE', 'Cẩm', 'Tú', 'LOCAL', 'camtu.naugi', 'camtunaugi@icloud.com', null, 'Nấu ăn cho gia đình là niềm vui mỗi ngày.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/gculbmjkyqtdub8j82gz', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877457/profile-avatar/gculbmjkyqtdub8j82gz.jpg');
@@ -49,7 +49,7 @@ VALUES (now(), 5, now(), 5, 'AVATAR');
 
 -- User ID: 6 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1985-04-18', '2025-01-20 10:20:00', '2025-01-20 10:20:00', 'FEMALE', 'USER', 'ACTIVE', 'Thu', 'Hà', 'LOCAL', 'thuhabepnha', 'thuhabepnha@gmail.com', null, 'Các món ăn sáng tạo, kết hợp Á-Âu.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1985-04-18', '2025-01-20 10:20:00', '2025-01-20 10:20:00', 'FEMALE', 'USER', 'ACTIVE', 'Thu', 'Hà', 'LOCAL', 'thuhabepnha', 'thuhabepnha@gmail.com', null, 'Các món ăn sáng tạo, kết hợp Á-Âu.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/jlwtvdtw4yuqz0sejftt', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877540/profile-avatar/jlwtvdtw4yuqz0sejftt.jpg');
@@ -59,7 +59,7 @@ VALUES (now(), 6, now(), 6, 'AVATAR');
 
 -- User ID: 7 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1997-09-03', '2025-01-20 10:25:00', '2025-01-20 10:25:00', 'FEMALE', 'USER', 'ACTIVE', 'Diệu', 'Linh', 'LOCAL', 'linh.anvat', 'dieu.linh@hotmail.com', null, 'Chuyên các công thức làm món ăn vặt, đồ uống.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1997-09-03', '2025-01-20 10:25:00', '2025-01-20 10:25:00', 'FEMALE', 'USER', 'ACTIVE', 'Diệu', 'Linh', 'LOCAL', 'linh.anvat', 'dieu.linh@hotmail.com', null, 'Chuyên các công thức làm món ăn vặt, đồ uống.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/bb4ymo9tw7fgduisdtwn', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877721/profile-avatar/bb4ymo9tw7fgduisdtwn.jpg');
@@ -69,7 +69,7 @@ VALUES (now(), 7, now(), 7, 'AVATAR');
 
 -- User ID: 8 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1990-06-25', '2025-01-20 10:30:00', '2025-01-20 10:30:00', 'FEMALE', 'USER', 'ACTIVE', 'Yến', 'Nhi', 'LOCAL', 'yennhi_healthy', 'yennhi.nau@protonmail.com', null, 'Các món ăn chay và thuần chay.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1990-06-25', '2025-01-20 10:30:00', '2025-01-20 10:30:00', 'FEMALE', 'USER', 'ACTIVE', 'Yến', 'Nhi', 'LOCAL', 'yennhi_healthy', 'yennhi.nau@protonmail.com', null, 'Các món ăn chay và thuần chay.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/ew1oenge1ettsboh7vtc', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763877928/profile-avatar/ew1oenge1ettsboh7vtc.jpg');
@@ -79,7 +79,7 @@ VALUES (now(), 8, now(), 8, 'AVATAR');
 
 -- User ID: 9 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1988-02-14', '2025-01-20 10:35:00', '2025-01-20 10:35:00', 'FEMALE', 'USER', 'ACTIVE', 'Phương', 'Anh', 'LOCAL', 'phuong_anh.mom', 'phuonganh.mom@gmail.com', null, 'Công thức đơn giản, nhanh gọn cho mẹ bỉm sữa.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1988-02-14', '2025-01-20 10:35:00', '2025-01-20 10:35:00', 'FEMALE', 'USER', 'ACTIVE', 'Phương', 'Anh', 'LOCAL', 'phuong_anh.mom', 'phuonganh.mom@gmail.com', null, 'Công thức đơn giản, nhanh gọn cho mẹ bỉm sữa.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/x2qzuxgavyjscpvhktn9', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878032/profile-avatar/x2qzuxgavyjscpvhktn9.jpg');
@@ -88,7 +88,7 @@ INSERT INTO user_media (created_at, media_id, updated_at, user_id, type)
 VALUES (now(), 9, now(), 9, 'AVATAR');
 -- User ID: 10 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1993-10-22', '2025-01-20 10:40:00', '2025-01-20 10:40:00', 'FEMALE', 'USER', 'ACTIVE', 'Ngọc', 'Huyền', 'LOCAL', 'ngochuyen_dulich', 'ngochuyen.dl@yahoo.com', null, 'Khám phá và tái tạo công thức ẩm thực đường phố.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1993-10-22', '2025-01-20 10:40:00', '2025-01-20 10:40:00', 'FEMALE', 'USER', 'ACTIVE', 'Ngọc', 'Huyền', 'LOCAL', 'ngochuyen_dulich', 'ngochuyen.dl@yahoo.com', null, 'Khám phá và tái tạo công thức ẩm thực đường phố.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/aekrzufjce6flkxc3he9', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878121/profile-avatar/aekrzufjce6flkxc3he9.jpg');
@@ -98,7 +98,7 @@ VALUES (now(), 10, now(), 10, 'AVATAR');
 
 -- User ID: 11 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1996-05-08', '2025-01-20 10:45:00', '2025-01-20 10:45:00', 'FEMALE', 'USER', 'ACTIVE', 'Kiều', 'Trang', 'LOCAL', 'kieutrang_kitchen', 'trang.kitchen@outlook.com', null, 'Thích nấu các món Âu, đặc biệt là Ý.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1996-05-08', '2025-01-20 10:45:00', '2025-01-20 10:45:00', 'FEMALE', 'USER', 'ACTIVE', 'Kiều', 'Trang', 'LOCAL', 'kieutrang_kitchen', 'trang.kitchen@outlook.com', null, 'Thích nấu các món Âu, đặc biệt là Ý.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/r9pqklswu8vc2kpdmlu9', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878212/profile-avatar/r9pqklswu8vc2kpdmlu9.jpg');
@@ -108,7 +108,7 @@ VALUES (now(), 11, now(), 11, 'AVATAR');
 
 -- User ID: 12 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1989-12-03', '2025-01-20 10:50:00', '2025-01-20 10:50:00', 'MALE', 'USER', 'ACTIVE', 'Quang', 'Huy', 'LOCAL', 'quanghuy_chef', 'quanghuy.chef@gmail.com', null, 'Bếp trưởng tại gia, chia sẻ bí quyết nấu ăn chuyên nghiệp.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1989-12-03', '2025-01-20 10:50:00', '2025-01-20 10:50:00', 'MALE', 'USER', 'ACTIVE', 'Quang', 'Huy', 'LOCAL', 'quanghuy_chef', 'quanghuy.chef@gmail.com', null, 'Bếp trưởng tại gia, chia sẻ bí quyết nấu ăn chuyên nghiệp.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/qnv0poawdffzeemrwl1x', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763876418/profile-avatar/qnv0poawdffzeemrwl1x.jpg');
@@ -117,7 +117,7 @@ INSERT INTO user_media (created_at, media_id, updated_at, user_id, type)
 VALUES (now(), 12, now(), 12, 'AVATAR');
 -- User ID: 13 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1994-08-10', '2025-01-20 10:55:00', '2025-01-20 10:55:00', 'MALE', 'USER', 'ACTIVE', 'Thế', 'Anh', 'LOCAL', 'theanh_streetfood', 'theanh.food@yahoo.com', null, 'Tái hiện công thức các món ăn đường phố.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1994-08-10', '2025-01-20 10:55:00', '2025-01-20 10:55:00', 'MALE', 'USER', 'ACTIVE', 'Thế', 'Anh', 'LOCAL', 'theanh_streetfood', 'theanh.food@yahoo.com', null, 'Tái hiện công thức các món ăn đường phố.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/rcah5yil4xblrv1khhsu', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763876662/profile-avatar/rcah5yil4xblrv1khhsu.jpg');
@@ -127,7 +127,7 @@ VALUES (now(), 13, now(), 13, 'AVATAR');
 
 -- User ID: 14 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1982-05-20', '2025-01-20 11:00:00', '2025-01-20 11:00:00', 'MALE', 'USER', 'ACTIVE', 'Văn', 'Khoa', 'LOCAL', 'khoa_bbq', 'vankhoa.bbq@outlook.com', null, 'Chuyên các món nướng (BBQ) và ẩm thực dã ngoại.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1982-05-20', '2025-01-20 11:00:00', '2025-01-20 11:00:00', 'MALE', 'USER', 'ACTIVE', 'Văn', 'Khoa', 'LOCAL', 'khoa_bbq', 'vankhoa.bbq@outlook.com', null, 'Chuyên các món nướng (BBQ) và ẩm thực dã ngoại.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/uwyb1hcvj0caaq7dedhg', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878436/profile-avatar/uwyb1hcvj0caaq7dedhg.jpg');
@@ -137,7 +137,7 @@ VALUES (now(), 14, now(), 14, 'AVATAR');
 
 -- User ID: 15 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1991-03-29', '2025-01-20 11:05:00', '2025-01-20 11:05:00', 'MALE', 'USER', 'ACTIVE', 'Hoàng', 'Duy', 'LOCAL', 'hoangduy_bepviet', 'duy.bepviet@gmail.com', null, 'Nấu các món ăn truyền thống miền Bắc.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1991-03-29', '2025-01-20 11:05:00', '2025-01-20 11:05:00', 'MALE', 'USER', 'ACTIVE', 'Hoàng', 'Duy', 'LOCAL', 'hoangduy_bepviet', 'duy.bepviet@gmail.com', null, 'Nấu các món ăn truyền thống miền Bắc.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/wsaaqevxrdisocs6sh36', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878558/profile-avatar/wsaaqevxrdisocs6sh36.jpg');
@@ -147,7 +147,7 @@ VALUES (now(), 15, now(), 15, 'AVATAR');
 
 -- User ID: 16 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1987-11-12', '2025-01-20 11:10:00', '2025-01-20 11:10:00', 'MALE', 'USER', 'ACTIVE', 'Anh', 'Tài', 'LOCAL', 'anhtai_foodlab', 'anhtai.lab@hotmail.com', null, 'Thử nghiệm các kỹ thuật nấu ăn hiện đại.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1987-11-12', '2025-01-20 11:10:00', '2025-01-20 11:10:00', 'MALE', 'USER', 'ACTIVE', 'Anh', 'Tài', 'LOCAL', 'anhtai_foodlab', 'anhtai.lab@hotmail.com', null, 'Thử nghiệm các kỹ thuật nấu ăn hiện đại.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/iu1kiqkolant8skhxvdj', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878652/profile-avatar/iu1kiqkolant8skhxvdj.jpg');
@@ -157,7 +157,7 @@ VALUES (now(), 16, now(), 16, 'AVATAR');
 
 -- User ID: 17 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1999-01-01', '2025-01-20 11:15:00', '2025-01-20 11:15:00', 'MALE', 'USER', 'ACTIVE', 'Đức', 'Trọng', 'LOCAL', 'ductrong_healthy', 'ductrong.gym@icloud.com', null, 'Công thức nấu ăn tăng cơ giảm mỡ cho người tập gym.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1999-01-01', '2025-01-20 11:15:00', '2025-01-20 11:15:00', 'MALE', 'USER', 'ACTIVE', 'Đức', 'Trọng', 'LOCAL', 'ductrong_healthy', 'ductrong.gym@icloud.com', null, 'Công thức nấu ăn tăng cơ giảm mỡ cho người tập gym.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/uzopkoymmkxrs4xdmftu', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878773/profile-avatar/uzopkoymmkxrs4xdmftu.jpg');
@@ -167,7 +167,7 @@ VALUES (now(), 17, now(), 17, 'AVATAR');
 
 -- User ID: 18 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1984-06-07', '2025-01-20 11:20:00', '2025-01-20 11:20:00', 'MALE', 'USER', 'ACTIVE', 'Minh', 'Khôi', 'LOCAL', 'minkhoi_cafe', 'minh.khoi.food@protonmail.com', null, 'Món ăn kèm cà phê và các công thức pha chế đơn giản.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1984-06-07', '2025-01-20 11:20:00', '2025-01-20 11:20:00', 'MALE', 'USER', 'ACTIVE', 'Minh', 'Khôi', 'LOCAL', 'minkhoi_cafe', 'minh.khoi.food@protonmail.com', null, 'Món ăn kèm cà phê và các công thức pha chế đơn giản.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/rjicyyzsk4m1gv6ctzyi', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878773/profile-avatar/rjicyyzsk4m1gv6ctzyi.jpg');
@@ -177,7 +177,7 @@ VALUES (now(), 18, now(), 18, 'AVATAR');
 
 -- User ID: 19 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1997-04-21', '2025-01-20 11:25:00', '2025-01-20 11:25:00', 'MALE', 'USER', 'ACTIVE', 'Việt', 'Bách', 'LOCAL', 'vietbach_nauanchay', 'vietbach.chay@yahoo.com', null, 'Đăng tải các công thức nấu món chay hiện đại.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1997-04-21', '2025-01-20 11:25:00', '2025-01-20 11:25:00', 'MALE', 'USER', 'ACTIVE', 'Việt', 'Bách', 'LOCAL', 'vietbach_nauanchay', 'vietbach.chay@yahoo.com', null, 'Đăng tải các công thức nấu món chay hiện đại.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/kvvzvoz8u7e8g4hybpif', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763878998/profile-avatar/kvvzvoz8u7e8g4hybpif.jpg');
@@ -187,7 +187,7 @@ VALUES (now(), 19, now(), 19, 'AVATAR');
 
 -- User ID: 20 (User)
 INSERT INTO users (date_of_birth, created_at, updated_at, gender, role, status, first_name, last_name, provider, username, email, provider_id, biography, password)
-VALUES ('1986-09-17', '2025-01-20 11:30:00', '2025-01-20 11:30:00', 'MALE', 'USER', 'ACTIVE', 'Trường', 'Giang', 'LOCAL', 'truonggiang_nau', 'truonggiang.nau@gmail.com', null, 'Sở thích khám phá ẩm thực quốc tế.', '$2a$10$smVm9ubBF8V6cMlGLStjPOIzFLKoFS6js4J/WnjwAF2toALGXepjO');
+VALUES ('1986-09-17', '2025-01-20 11:30:00', '2025-01-20 11:30:00', 'MALE', 'USER', 'ACTIVE', 'Trường', 'Giang', 'LOCAL', 'truonggiang_nau', 'truonggiang.nau@gmail.com', null, 'Sở thích khám phá ẩm thực quốc tế.', '$2a$10$8XtiX/psuEEt8ZcoA6D./efddCivHxasvfh8OqQLyjcBCj0YXtjUe');
 
 INSERT INTO media (created_at, public_id, type, updated_at, url)
 VALUES (now(), 'profile-avatar/hw0wocoglsnvocspatrr', 'IMAGE', now(), 'https://res.cloudinary.com/dwvgjmjuo/image/upload/v1763879110/profile-avatar/hw0wocoglsnvocspatrr.jpg');

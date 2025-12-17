@@ -11,4 +11,6 @@ public interface AIService {
     List<MealPlanDto> generateMealPlan(String message);
 
     RecipeDto5 generateRecipe(String message);
+
+    String generateRecipeFromContent(String content);
 }

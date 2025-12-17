@@ -6,6 +6,7 @@ import com.vn.cookinote.enums.ApiStatus;
 import com.vn.cookinote.models.Recipe;
 import com.vn.cookinote.services.RecipeService;
 import com.vn.cookinote.services.ViewHistoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class RecipeController {
     private final ViewHistoryService viewHistoryService;
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<RecipeDto2>> createRecipe(@RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<ApiResponse<RecipeDto2>> createRecipe(@Valid @RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
         Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
         Recipe recipe = recipeService.createRecipe(recipeDto, userid);
         return ApiResponse.toResponseEntity(ApiStatus.CREATED, ApiStatus.CREATED.getMessage(), RecipeDto2.fromEntity(recipe));
@@ -48,7 +49,7 @@ public class RecipeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<RecipeDto2>> updateRecipe(@PathVariable Long id, @RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<ApiResponse<RecipeDto2>> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeDto recipeDto, @AuthenticationPrincipal Jwt jwt) {
         Long userid = Long.valueOf(jwt.getClaimAsString("userId"));
         Recipe recipe = recipeService.updateRecipe(recipeDto, id, userid);
         if (recipe == null) {

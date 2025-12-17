@@ -8,6 +8,7 @@ import com.vn.cookinote.enums.Status;
 import com.vn.cookinote.models.User;
 import com.vn.cookinote.services.AuthenticationService;
 import com.vn.cookinote.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +32,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Object>> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<ApiResponse<Object>> register(@Valid @RequestBody RegisterRequest registerRequest) {
 
         // Check if the email already exists in the system
         if (userService.isEmailExist(registerRequest.email())) {
@@ -55,7 +56,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<ApiResponse<Object>> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<ApiResponse<Object>> authenticate(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
 
         String email = authenticationRequest.email();
 
